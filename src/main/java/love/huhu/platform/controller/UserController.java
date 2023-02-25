@@ -1,6 +1,7 @@
 package love.huhu.platform.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Create 2023-02-25 上午9:47
  */
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserController {
 
 }
