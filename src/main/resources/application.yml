@@ -1,0 +1,14 @@
+# 应用名称
+spring:
+  application:
+    name: platform-server
+  profiles:
+    active: dev
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+server:
+  servlet:
+    encoding:
+      force: true
+      charset: utf-8
+      enabled: true
