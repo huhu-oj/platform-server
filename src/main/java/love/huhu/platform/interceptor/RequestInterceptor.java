@@ -1,22 +1,18 @@
 package love.huhu.platform.interceptor;
 
-import cn.hutool.core.exceptions.ValidateException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import love.huhu.platform.authorization.AuthorizationHandler;
 import love.huhu.platform.authorization.AuthorizationRequired;
-import love.huhu.platform.authorization.UserHolder;
 import love.huhu.platform.authorization.PermissionEnum;
-import org.springframework.http.MediaType;
+import love.huhu.platform.authorization.UserHolder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.lang.reflect.Method;
 
 /**
@@ -46,18 +42,16 @@ public class RequestInterceptor implements HandlerInterceptor {
         PermissionEnum permission = annotation.value();
 
         try {
-            boolean isLogin = authorizationHandler.handleIdentity(request);
-            if (!isLogin) {
-                return false;
-            }
-        } catch (ValidateException e) {
-            String message = e.getMessage();
+            authorizationHandler.handleIdentity(request);
+        } catch (RuntimeException e) {
+            log.error(e.getMessage());
             return false;
         }
 
-        boolean havePermission = authorizationHandler.handleAuth(permission);
-        if (!havePermission) {
-            return false;
+        try {
+            authorizationHandler.handleAuth(permission);
+        } catch (Exception e) {
+            log.error(e.getMessage());
         }
         return true;
     }

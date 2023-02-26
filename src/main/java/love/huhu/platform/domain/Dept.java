@@ -15,16 +15,11 @@
  */
 package love.huhu.platform.domain;
 
-import io.swagger.annotations.ApiModelProperty;
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Objects;
-import java.util.Set;
 
 /**
 * @author Zheng Jie
@@ -34,9 +29,9 @@ import java.util.Set;
 @Setter
 public class Dept implements Serializable {
 
+    @TableField("deptId")
     private Long id;
 
     private String name;
-
 
 }

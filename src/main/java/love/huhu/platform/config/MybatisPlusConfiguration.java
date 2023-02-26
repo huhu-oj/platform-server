@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
  * @create 2022/8/9 11:38
  */
 @Configuration
-@MapperScan("love.huhu.ojsystem.mapper")
+@MapperScan("love.huhu.platform.mapper")
 
 public class MybatisPlusConfiguration {
     @Bean
