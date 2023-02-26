@@ -1,5 +1,6 @@
 package love.huhu.platform;
 
+import cn.hutool.json.JSONObject;
 import cn.hutool.jwt.JWTUtil;
 import love.huhu.platform.client.ManagerClient;
 import love.huhu.platform.domain.User;
@@ -34,7 +35,7 @@ class PlatformServerApplicationTests {
     }
     @Test void getAnswerRecord() {
         managerClient.systemLogin();
-        String answerRecords = managerClient.getAnswerRecords(1L, 1L);
+        JSONObject answerRecords = managerClient.getAnswerRecords(1L, 1L);
         System.out.println(answerRecords);
     }
 }

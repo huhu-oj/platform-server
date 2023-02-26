@@ -8,7 +8,10 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
+import love.huhu.platform.authorization.UserHolder;
 import love.huhu.platform.config.porperties.AuthorizationProperties;
+import love.huhu.platform.domain.Solution;
+import love.huhu.platform.domain.Test;
 import love.huhu.platform.domain.User;
 import love.huhu.platform.dto.UserLoginDto;
 import love.huhu.platform.service.UserService;
@@ -18,9 +21,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 /**
  * @Description
@@ -39,7 +40,6 @@ public class ManagerClient {
     @Value("${system.password}")
     String password;
 
-    public static final String cacheKey = "USER-LOGIN-DATA";
     private final AuthorizationProperties properties;
     private final RedisUtils redisUtils;
     private final UserService userService;
@@ -62,7 +62,7 @@ public class ManagerClient {
         //userLoginDto->json
         String request = JSONUtil.toJsonStr(userLoginDto);
         //发送请求
-        String response = managerPost("/auth/login")
+        String response = HttpRequest.post(managerServerApi+"/auth/login")
                 .body(request)
                 .execute().body();
         //处理响应
@@ -85,25 +85,98 @@ public class ManagerClient {
         return user;
     }
 
-    public String getAnswerRecords(Long problemId, Long studentId) {
+    public JSONObject getAnswerRecords(Long problemId, Long studentId) {
         String response = managerGet("/api/answerRecord")
                 .form("problemId", problemId)
                 .form("userId", studentId)
-                .header(properties.getHeader(),token)
                 .execute().body();
 
-        return response;
+        return JSONUtil.parseObj(response);
     }
     private HttpRequest managerGet(String url) {
-        return HttpRequest.get(managerServerApi+url);
+        if (StrUtil.isBlank(token)) {
+            systemLogin();
+        }
+        return HttpRequest.get(managerServerApi+url)
+                .header(properties.getHeader(),token);
     }
     private HttpRequest managerPost(String url) {
-        return HttpRequest.post(managerServerApi+url);
+        if (StrUtil.isBlank(token)) {
+            systemLogin();
+        }
+        return HttpRequest.post(managerServerApi+url)
+                .header(properties.getHeader(),token);
     }
     private HttpRequest managerPut(String url) {
-        return HttpRequest.put(managerServerApi+url);
+        if (StrUtil.isBlank(token)) {
+            systemLogin();
+        }
+        return HttpRequest.put(managerServerApi+url)
+                .header(properties.getHeader(),token);
     }
     private HttpRequest managerDel(String url) {
-        return HttpRequest.delete(managerServerApi+url);
+        if (StrUtil.isBlank(token)) {
+            systemLogin();
+        }
+        return HttpRequest.delete(managerServerApi+url)
+                .header(properties.getHeader(),token);
+    }
+
+    public JSONObject getExaminationPaper(Long paperId) {
+        String response = managerGet("/api/examinationPaper")
+                .form("id", paperId)
+                .execute().body();
+        return JSONUtil.parseObj(response);
+    }
+
+    public JSONObject getKnowledgeById(Long knowledgeId) {
+        String response = managerGet("/api/knowledge")
+                .form("id", knowledgeId)
+                .execute().body();
+        return JSONUtil.parseObj(response);
+    }
+
+    public JSONObject getLanguages() {
+        String response = managerGet("/api/language")
+                .execute().body();
+        return JSONUtil.parseObj(response);
+    }
+    public JSONObject getSolution(Long problemId,Long solutionId) {
+        String response = managerGet("/api/solution")
+                .form("problemId",problemId)
+                .form("solutionId",solutionId)
+                .execute().body();
+        return JSONUtil.parseObj(response);
+    }
+    public JSONObject saveSolution(Solution solution) {
+        // todo 交给谁做
+        String response = managerGet("/api/solution")
+                .body(JSONUtil.toJsonStr(solution))
+                .execute().body();
+        return JSONUtil.parseObj(response);
+    }
+    public JSONObject deleteSolutions(Long[] solutionIds) {
+        String response = managerDel("/api/solution")
+                .body(Arrays.toString(solutionIds))
+                .execute().body();
+        return JSONUtil.parseObj(response);
+    }
+    public JSONObject getTest(Long testId) {
+        String response = managerGet("/api/test")
+                .form("id",testId)
+                .execute().body();
+        return JSONUtil.parseObj(response);
+    }
+    public JSONObject updateTest(Test test) {
+        String response = managerGet("/api/test")
+                .body(JSONUtil.toJsonStr(test))
+                .execute().body();
+        return JSONUtil.parseObj(response);
+    }
+    public JSONObject deleteTests(Long[] testIds) {
+        String response = managerDel("/api/test")
+                .body(Arrays.toString(testIds))
+                .execute().body();
+        return JSONUtil.parseObj(response);
     }
 }

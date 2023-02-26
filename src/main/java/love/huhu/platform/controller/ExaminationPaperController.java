@@ -1,5 +1,7 @@
 package love.huhu.platform.controller;
 
+import lombok.RequiredArgsConstructor;
+import love.huhu.platform.client.ManagerClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("examinationPaper")
-public class ExaminationPaper {
+@RequiredArgsConstructor
+public class ExaminationPaperController {
+    private final ManagerClient managerClient;
     @GetMapping
     public ResponseEntity<Object> getExaminationPaper(Long id) {
 
-        return new ResponseEntity<>(HttpStatus.OK);
+
+        return new ResponseEntity<>(managerClient.getExaminationPaper(id),HttpStatus.OK);
     }
 }

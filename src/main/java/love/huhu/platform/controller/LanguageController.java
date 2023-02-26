@@ -1,5 +1,7 @@
 package love.huhu.platform.controller;
 
+import lombok.RequiredArgsConstructor;
+import love.huhu.platform.client.ManagerClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/language")
+@RequiredArgsConstructor
 public class LanguageController {
+    private final ManagerClient managerClient;
     @GetMapping
     public ResponseEntity<Object> getLanguages() {
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(managerClient.getLanguages(),HttpStatus.OK);
     }
 }

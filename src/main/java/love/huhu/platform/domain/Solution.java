@@ -55,6 +55,9 @@ public class Solution implements Serializable {
     @ApiModelProperty(value = "渲染文本")
     private String descriptionHtml;
 
+    @ApiModelProperty("所属用户")
+    private Long userId;
+
     private Long[] labelIds;
 
     public void copy(Solution source){

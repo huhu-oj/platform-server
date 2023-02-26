@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/answerRecord")
 @RequiredArgsConstructor
 public class AnswerRecordController {
-    private ManagerClient managerClient;
+    private final ManagerClient managerClient;
     @GetMapping
     public ResponseEntity<Object> getAnswerRecords(Long problemId) {
 
