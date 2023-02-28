@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Create 2023-02-25 下午3:01
  */
 @RestController
-@RequestMapping("/judge")
+@RequestMapping("/api/judge")
 @RequiredArgsConstructor
 public class JudgeController {
 

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Create 2023-02-25 下午10:40
  */
 @RestController
-@RequestMapping("/answerRecord")
+@RequestMapping("/api/answerRecord")
 @RequiredArgsConstructor
 public class AnswerRecordController {
     private final ManagerClient managerClient;

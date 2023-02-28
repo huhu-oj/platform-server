@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Create 2023-02-25 下午10:48
  */
 @RestController
-@RequestMapping("examinationPaper")
+@RequestMapping("/api/examinationPaper")
 @RequiredArgsConstructor
 public class ExaminationPaperController {
     private final ManagerClient managerClient;

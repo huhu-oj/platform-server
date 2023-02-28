@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
  * @Create 2023-02-25 下午10:59
  */
 @RestController
-@RequestMapping("/test")
+@RequestMapping("/api/test")
 public class testController {
     @GetMapping
     public ResponseEntity<Object> getTest(Long testId) {

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Create 2023-02-25 下午10:56
  */
 @RestController
-@RequestMapping("/language")
+@RequestMapping("/api/language")
 @RequiredArgsConstructor
 public class LanguageController {
     private final ManagerClient managerClient;

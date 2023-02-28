@@ -7,9 +7,7 @@ import love.huhu.platform.dto.UserLoginDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
@@ -20,6 +18,7 @@ import java.io.UnsupportedEncodingException;
  * @create 2022/9/24 18:27
  */
 @RestController
+@RequestMapping("auth")
 @RequiredArgsConstructor
 public class LoginController {
 
@@ -32,5 +31,9 @@ public class LoginController {
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody @Validated UserLoginDto dtoForRegister) {
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping("/code")
+    public ResponseEntity<Object> getCode() {
+        return new ResponseEntity<>(managerClient.getGraphicCode(),HttpStatus.OK);
     }
 }

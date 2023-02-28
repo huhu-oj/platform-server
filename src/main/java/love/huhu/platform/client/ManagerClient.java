@@ -85,6 +85,12 @@ public class ManagerClient {
         return user;
     }
 
+    public JSONObject getGraphicCode() {
+        String response = managerGet("/auth/code")
+                .execute().body();
+
+        return JSONUtil.parseObj(response);
+    }
     public JSONObject getAnswerRecords(Long problemId, Long studentId) {
         String response = managerGet("/api/answerRecord")
                 .form("problemId", problemId)

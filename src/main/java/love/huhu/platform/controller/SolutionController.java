@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
  * @Create 2023-02-25 下午10:59
  */
 @RestController
-@RequestMapping("/solution")
+@RequestMapping("/api/solution")
 public class SolutionController {
     @GetMapping
     public ResponseEntity<Object> getSolutions(Long problemId) {
