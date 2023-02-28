@@ -38,4 +38,8 @@ public class UserHolder {
         return ((User) map.get("user")).getId();
     }
 
+    public static User getUser() {
+        Map<String, Object> map = USER_HOLDER_THREAD_LOCAL.get();
+        return ((User) map.get("user"));
+    }
 }

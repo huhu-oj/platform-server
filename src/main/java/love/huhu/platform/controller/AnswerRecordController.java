@@ -21,14 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class AnswerRecordController {
     private final ManagerClient managerClient;
     @GetMapping
-    public ResponseEntity<Object> getAnswerRecords(Long problemId) {
+    public ResponseEntity<Object> getAnswerRecords(Long problemId,Long answerRecordId) {
 
-        return new ResponseEntity<>(managerClient.getAnswerRecords(problemId, UserHolder.getUserId()),HttpStatus.OK);
+        return new ResponseEntity<>(managerClient.getAnswerRecords(problemId, UserHolder.getUserId(), answerRecordId),HttpStatus.OK);
     }
     @GetMapping("teacher")
     public ResponseEntity<Object> getAnswerRecordsForTeacher(Long problemId,Long studentId) {
 
-        return new ResponseEntity<>(managerClient.getAnswerRecords(problemId, studentId),HttpStatus.OK);
+        return new ResponseEntity<>(managerClient.getAnswerRecords(problemId, studentId, null),HttpStatus.OK);
     }
 
 }

@@ -91,10 +91,11 @@ public class ManagerClient {
 
         return JSONUtil.parseObj(response);
     }
-    public JSONObject getAnswerRecords(Long problemId, Long studentId) {
+    public JSONObject getAnswerRecords(Long problemId, Long studentId,Long answerRecordId) {
         String response = managerGet("/api/answerRecord")
                 .form("problemId", problemId)
                 .form("userId", studentId)
+                .form("id", answerRecordId)
                 .execute().body();
 
         return JSONUtil.parseObj(response);
@@ -182,6 +183,12 @@ public class ManagerClient {
     public JSONObject deleteTests(Long[] testIds) {
         String response = managerDel("/api/test")
                 .body(Arrays.toString(testIds))
+                .execute().body();
+        return JSONUtil.parseObj(response);
+    }
+
+    public JSONObject getExecuteResult() {
+        String response = managerGet("/api/executeResult")
                 .execute().body();
         return JSONUtil.parseObj(response);
     }
