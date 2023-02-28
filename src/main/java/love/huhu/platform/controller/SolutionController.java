@@ -14,14 +14,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/solution")
 public class SolutionController {
     @GetMapping
-    public ResponseEntity<Object> getSolutions(Long problemId) {
+    public ResponseEntity<Object> getSolutions(Long problemId, Long solutionId) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("{solutionId}")
-    public ResponseEntity<Object> getSolution(@PathVariable Long solutionId) {
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
     @PostMapping
     public ResponseEntity<Object> saveSolution(@RequestBody Solution solution) {
         return new ResponseEntity<>(HttpStatus.OK);
