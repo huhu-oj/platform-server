@@ -22,10 +22,19 @@ import javax.servlet.http.HttpServletRequest;
 public class AuthorizationHandler {
 
     private final RedisUtils redisUtils;
-    private AuthorizationProperties properties;
+    private final AuthorizationProperties properties;
     private final ManagerClient managerClient;
+
     public boolean handleIdentity(HttpServletRequest request) {
         String token = getTokenHeader(request);
+        //开发配置
+        if (properties.getSkipToken() && StringUtils.isEmpty(token)) {
+            token = managerClient.getToken();
+            if (StringUtils.isEmpty(token) || !redisUtils.hasKey(properties.getOnlineKey()+token)) {
+                managerClient.systemLogin();
+                token = managerClient.getToken();
+            }
+        }
         if (StringUtils.isEmpty(token)) {
             throw new RuntimeException("token为空");
         }
@@ -35,7 +44,7 @@ public class AuthorizationHandler {
         token = token.substring(token.indexOf(" ")+1);
         log.debug("切割token：{}",token);
         //校验token
-        if (redisUtils.get(properties.getOnlineKey()+token) == null) {
+        if (!redisUtils.hasKey(properties.getOnlineKey()+token)) {
             throw new RuntimeException("token过期");
         }
         //解析token

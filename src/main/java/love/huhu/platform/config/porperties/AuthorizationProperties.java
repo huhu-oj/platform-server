@@ -32,6 +32,7 @@ public class AuthorizationProperties {
     //  renew: 3600000
     private Long renew;
 
+    private Boolean skipToken;
     public String getTokenStartWith() {
         return this.tokenStartWith + " ";
     }

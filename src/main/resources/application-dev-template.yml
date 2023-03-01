@@ -44,6 +44,8 @@ jwt:
   detect: 1800000
   # 续期时间范围，默认1小时，单位毫秒
   renew: 3600000
+  # 跳过token（使用系统用户登录）
+  skipToken: true
 mybatis-plus:
   global-config:
     db-config:
@@ -53,6 +55,7 @@ verify:
   public-key: "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCHqiQBzffwX9H/dO+gFqCPC1DrnoYJD8+ED6iCRy0qGj4XjaCFsyP/r9ku1xWdXOiXpR4ktGBQ2s2HUsrtVS3/ta7BwWaHEOGwPfk7PF5tgjvOwR00bIFXdnbh7JJiaPQmea5L0+V4OvP4slw8Uz/ie+hwoxNSOArBQvBLRFZu2QIDAQAB"
 api:
   manager-server: http://127.0.0.1:8000
+# 系统用户
 system:
   username: system
   password: system
