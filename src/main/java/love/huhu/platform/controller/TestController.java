@@ -1,6 +1,9 @@
 package love.huhu.platform.controller;
 
+import lombok.RequiredArgsConstructor;
 import love.huhu.platform.authorization.AuthorizationRequired;
+import love.huhu.platform.authorization.UserHolder;
+import love.huhu.platform.client.ManagerClient;
 import love.huhu.platform.domain.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +16,13 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/test")
-public class testController {
+@RequiredArgsConstructor
+public class TestController {
+    private final ManagerClient managerClient;
     @AuthorizationRequired
     @GetMapping
-    public ResponseEntity<Object> getTest(Long testId) {
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Object> getMyTest(Long testId) {
+        return new ResponseEntity<>(managerClient.getMyTest(UserHolder.getUserId(),testId),HttpStatus.OK);
     }
 
     @AuthorizationRequired

@@ -65,6 +65,10 @@ public class Test implements Serializable {
     @ApiModelProperty(value = "是否启用")
     private Boolean enabled;
 
+    @NotNull
+    @ApiModelProperty(value = "所属用户")
+    private Long userId;
+
     public void copy(Test source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }

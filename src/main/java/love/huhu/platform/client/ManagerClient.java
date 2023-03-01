@@ -45,6 +45,10 @@ public class ManagerClient {
     private final UserService userService;
     private String token;
 
+    public String getToken() {
+        return token;
+    }
+
     /**
      * 系统登录接口
      */
@@ -101,9 +105,6 @@ public class ManagerClient {
         return JSONUtil.parseObj(response);
     }
     private HttpRequest managerGet(String url) {
-        if (StrUtil.isBlank(token)) {
-            systemLogin();
-        }
         return HttpRequest.get(managerServerApi+url)
                 .header(properties.getHeader(),token);
     }
@@ -151,7 +152,7 @@ public class ManagerClient {
     public JSONObject getSolution(Long problemId,Long solutionId) {
         String response = managerGet("/api/solution")
                 .form("problemId",problemId)
-                .form("solutionId",solutionId)
+                .form("id",solutionId)
                 .execute().body();
         return JSONUtil.parseObj(response);
     }
@@ -189,6 +190,21 @@ public class ManagerClient {
 
     public JSONObject getExecuteResult() {
         String response = managerGet("/api/executeResult")
+                .execute().body();
+        return JSONUtil.parseObj(response);
+    }
+
+    public JSONObject getProblem(Long problemId) {
+        String response = managerGet("/api/problem")
+                .form("id",problemId)
+                .execute().body();
+        return JSONUtil.parseObj(response);
+    }
+
+    public JSONObject getMyTest(Long userId,Long testId) {
+        String response = managerGet("/api/test")
+                .form("userId",userId)
+                .form("id",testId)
                 .execute().body();
         return JSONUtil.parseObj(response);
     }
