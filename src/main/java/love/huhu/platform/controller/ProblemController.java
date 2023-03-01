@@ -1,5 +1,6 @@
 package love.huhu.platform.controller;
 
+import love.huhu.platform.authorization.AuthorizationRequired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/problem")
 public class ProblemController {
+    @AuthorizationRequired
     @GetMapping
     public ResponseEntity<Object> getProblemById(Long id) {
         return new ResponseEntity<>(HttpStatus.OK);

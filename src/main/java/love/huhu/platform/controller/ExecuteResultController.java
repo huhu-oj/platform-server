@@ -1,6 +1,7 @@
 package love.huhu.platform.controller;
 
 import lombok.RequiredArgsConstructor;
+import love.huhu.platform.authorization.AuthorizationRequired;
 import love.huhu.platform.client.ManagerClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ExecuteResultController {
 
     private final ManagerClient managerClient;
+    @AuthorizationRequired
     @GetMapping
     public ResponseEntity<Object> getExecuteResults() {
         return new ResponseEntity<>(managerClient.getExecuteResult(), HttpStatus.OK);

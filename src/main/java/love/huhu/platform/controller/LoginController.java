@@ -1,6 +1,7 @@
 package love.huhu.platform.controller;
 
 import lombok.RequiredArgsConstructor;
+import love.huhu.platform.authorization.AuthorizationRequired;
 import love.huhu.platform.client.ManagerClient;
 import love.huhu.platform.domain.User;
 import love.huhu.platform.dto.UserLoginDto;
@@ -23,6 +24,7 @@ import java.io.UnsupportedEncodingException;
 public class LoginController {
 
     private final ManagerClient managerClient;
+    @AuthorizationRequired
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody @Validated UserLoginDto dto, HttpServletResponse response) {
         User user = managerClient.userLogin(dto, response);

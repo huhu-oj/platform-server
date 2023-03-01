@@ -1,6 +1,7 @@
 package love.huhu.platform.controller;
 
 import lombok.RequiredArgsConstructor;
+import love.huhu.platform.authorization.AuthorizationRequired;
 import love.huhu.platform.authorization.UserHolder;
 import love.huhu.platform.client.ManagerClient;
 import org.springframework.http.HttpStatus;
@@ -21,10 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AnswerRecordController {
     private final ManagerClient managerClient;
     @GetMapping
+    @AuthorizationRequired
     public ResponseEntity<Object> getAnswerRecords(Long problemId,Long answerRecordId) {
 
         return new ResponseEntity<>(managerClient.getAnswerRecords(problemId, UserHolder.getUserId(), answerRecordId),HttpStatus.OK);
     }
+    @AuthorizationRequired
     @GetMapping("teacher")
     public ResponseEntity<Object> getAnswerRecordsForTeacher(Long problemId,Long studentId) {
 
