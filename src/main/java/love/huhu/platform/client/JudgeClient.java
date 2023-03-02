@@ -46,6 +46,9 @@ public class JudgeClient {
         record.copy(resultRecord);
         record.setUserId(UserHolder.getUserId());
         //保存record到数据库
+        if (record.getExecuteResultId() <= 0) {
+            throw new RuntimeException("判题失败");
+        }
         answerRecordService.save(record);
 
     }
