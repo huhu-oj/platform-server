@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import love.huhu.platform.authorization.UserHolder;
 import love.huhu.platform.domain.AnswerRecord;
 import love.huhu.platform.domain.JudgeMachine;
+import love.huhu.platform.service.AnswerRecordService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -21,11 +22,11 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class JudgeClient {
-
     private List<JudgeMachine> judgeMachines;
     @Value("${api.manager-server}")
     String managerServerApi;
     private final ManagerClient managerClient;
+    private final AnswerRecordService answerRecordService;
     public void judge(AnswerRecord record) {
         //获取判题机
 //        if (judgeMachines == null || judgeMachines.isEmpty()) {
@@ -33,18 +34,19 @@ public class JudgeClient {
 //        }
         //随机获取判题机
         JudgeMachine judgeMachine = judgeMachines.get(new Double(Math.floor(Math.random() * judgeMachines.size())).intValue());
+        judgeMachine.setUrl("http://127.0.0.1:8888");
 
         //发送判题请求
 
-        String result = HttpRequest.post(judgeMachine.getUrl() + "/v1/judge")
+        String result = HttpRequest.post(judgeMachine.getUrl() + "/api/v1/judge")
                 .body(JSONUtil.toJsonStr(record))
                 .execute().body();
         //结果封装回record
-        AnswerRecord resultRecord = JSONUtil.toBean(result, AnswerRecord.class);
+        AnswerRecord resultRecord = dealResult(result);
         record.copy(resultRecord);
-        //todo 保存record到数据库
-
         record.setUserId(UserHolder.getUserId());
+        //保存record到数据库
+        answerRecordService.save(record);
 
     }
 
@@ -73,9 +75,15 @@ public class JudgeClient {
         JSONObject temp = JSONUtil.parseObj(result);
         String error = temp.get("Error", String.class);
         String log = temp.get("Log",String.class);
+        Integer passNum = temp.get("PassNum",Integer.class);
+        Integer notPassNum = temp.get("NotPassNum",Integer.class);
+        Long executeResultId = temp.get("ExecuteResultId",Long.class);
         AnswerRecord record = new AnswerRecord();
         record.setError(error);
         record.setLog(log);
+        record.setPassNum(passNum);
+        record.setNotPassNum(notPassNum);
+        record.setExecuteResultId(executeResultId);
         return record;
     }
 

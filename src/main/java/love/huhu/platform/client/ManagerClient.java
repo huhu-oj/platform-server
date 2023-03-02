@@ -10,10 +10,7 @@ import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import love.huhu.platform.authorization.UserHolder;
 import love.huhu.platform.config.porperties.AuthorizationProperties;
-import love.huhu.platform.domain.JudgeMachine;
-import love.huhu.platform.domain.Solution;
-import love.huhu.platform.domain.Test;
-import love.huhu.platform.domain.User;
+import love.huhu.platform.domain.*;
 import love.huhu.platform.dto.UserLoginDto;
 import love.huhu.platform.service.UserService;
 import love.huhu.platform.utils.RedisUtils;
@@ -23,6 +20,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -216,4 +214,5 @@ public class ManagerClient {
                 .form("enabled", true).execute().body();
         return JSONUtil.toList(JSONUtil.parseObj(response).getStr("content"), JudgeMachine.class);
     }
+
 }

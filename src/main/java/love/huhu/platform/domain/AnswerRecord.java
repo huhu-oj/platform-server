@@ -17,6 +17,7 @@ package love.huhu.platform.domain;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,6 +35,7 @@ import java.sql.Timestamp;
 * @date 2023-02-13
 **/
 @Getter
+@TableName(value ="oj_answer_record")
 @Setter
 public class AnswerRecord implements Serializable {
 
@@ -44,7 +46,6 @@ public class AnswerRecord implements Serializable {
     @NotNull
     @ApiModelProperty(value = "所属题目")
     private Long problemId;
-    @NotNull
     @ApiModelProperty(value = "所属用户")
     private Long userId;
 
@@ -71,7 +72,6 @@ public class AnswerRecord implements Serializable {
     @ApiModelProperty(value = "未通过数")
     private Integer notPassNum;
 
-    @NotNull
     @ApiModelProperty(value = "执行结果")
     private Long executeResultId;
 
