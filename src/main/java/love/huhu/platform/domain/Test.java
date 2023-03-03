@@ -17,6 +17,9 @@ package love.huhu.platform.domain;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.date.DateTime;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,6 +38,7 @@ import java.sql.Timestamp;
 **/
 @Getter
 @Setter
+@TableName("oj_test")
 public class Test implements Serializable {
 
     @Id
@@ -55,11 +59,11 @@ public class Test implements Serializable {
 
     @NotNull
     @ApiModelProperty(value = "开始时间")
-    private Timestamp startTime;
+    private DateTime startTime;
 
     @NotNull
     @ApiModelProperty(value = "结束时间")
-    private Timestamp endTime;
+    private DateTime endTime;
 
     @NotNull
     @ApiModelProperty(value = "是否启用")

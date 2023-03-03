@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="love.huhu.platform.mapper.TestMapper">
+
+    <resultMap id="BaseResultMap" type="love.huhu.platform.domain.Test">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="description" column="description" jdbcType="VARCHAR"/>
+            <result property="examinationPaperId" column="examination_paper_id" jdbcType="BIGINT"/>
+            <result property="startTime" column="start_time" jdbcType="TIMESTAMP"/>
+            <result property="endTime" column="end_time" jdbcType="TIMESTAMP"/>
+            <result property="enabled" column="enabled" jdbcType="TINYINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="userId" column="user_id" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,title,description,
+        examination_paper_id,start_time,end_time,
+        enabled,create_time,update_time,
+        user_id
+    </sql>
+    <insert id="saveTestDept">
+        insert into oj_test_dept(test_id,dept_id) values
+        <foreach item="dept" collection="depts" separator=",">
+            (#{id},#{dept.id})
+        </foreach>
+    </insert>
+    <resultMap id="testResultMap" type="love.huhu.platform.service.dto.TestDto">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="startTime" column="start_time" jdbcType="TIMESTAMP"/>
+        <result property="endTime" column="end_time" jdbcType="TIMESTAMP"/>
+        <result property="enabled" column="enabled" jdbcType="TINYINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <association property="examinationPaper" javaType="love.huhu.platform.domain.ExaminationPaper">
+            <id property="id" column="ep_id"/>
+            <result property="name" column="ep_name"/>
+        </association>
+    </resultMap>
+    <select id="getTestByDeptIds" resultType="long">
+--         select
+--             t.id,title,
+--             examination_paper_id,start_time,end_time,
+--             enabled,t.create_time,t.update_time,
+--             user_id,
+--             ep.id as ep_id,
+--             ep.name as ep_name
+--         from oj_test t, oj_examination_paper ep
+--         where t.examination_paper_id = ep.id
+--             and t.id in (
+                select test_id
+                from oj_test_dept
+                where dept_id in
+                <foreach collection="ids" open="(" close=")" separator="," item="id">
+                    #{id}
+                </foreach>
+--             )
+
+    </select>
+</mapper>

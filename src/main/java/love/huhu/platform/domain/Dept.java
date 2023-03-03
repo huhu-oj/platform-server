@@ -16,6 +16,8 @@
 package love.huhu.platform.domain;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,11 +29,29 @@ import java.io.Serializable;
 */
 @Getter
 @Setter
+@TableName(value ="sys_dept")
+
 public class Dept implements Serializable {
 
-    @TableField("deptId")
+//    @TableField("dept_id")
+    @TableId("dept_id")
     private Long id;
 
     private String name;
+    /**
+     * 上级部门
+     */
+    @TableField(value = "pid")
+    private Long pid;
 
+    /**
+     * 子部门数目
+     */
+    @TableField(value = "sub_count")
+    private Integer subCount;
+    /**
+     * 状态
+     */
+    @TableField(value = "enabled")
+    private Boolean enabled;
 }

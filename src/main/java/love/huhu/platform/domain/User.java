@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -40,6 +39,7 @@ public class User implements Serializable {
     @TableField (exist = false)
     @ApiModelProperty(value = "用户部门")
     private Dept dept;
+    private Long deptId;
 
     @TableField(value = "username")
     @NotBlank

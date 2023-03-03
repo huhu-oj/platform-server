@@ -5,6 +5,7 @@ import cn.hutool.core.util.URLUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
 import cn.hutool.http.HttpRequest;
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -201,12 +201,22 @@ public class ManagerClient {
         return JSONUtil.parseObj(response);
     }
 
-    public JSONObject getMyTest(Long userId,Long testId) {
+    public JSONArray getMyTest(Long userId, Long testId) {
         String response = managerGet("/api/test")
                 .form("userId",userId)
                 .form("id",testId)
                 .execute().body();
-        return JSONUtil.parseObj(response);
+        JSONArray array = JSONUtil.parseObj(response).getJSONArray("content");
+        if (array.toArray().length != 0) {
+            return array;
+        }
+        return null;
+    }
+    public JSONArray getTestByIds(List<Long> testIds) {
+        String response = managerGet("/api/test/ids")
+                .body(JSONUtil.toJsonStr(testIds))
+                .execute().body();
+        return JSONUtil.parseArray(response);
     }
 
     public List<JudgeMachine> getEnabledJudgeMachine() {
@@ -215,4 +225,13 @@ public class ManagerClient {
         return JSONUtil.toList(JSONUtil.parseObj(response).getStr("content"), JudgeMachine.class);
     }
 
+    public JSONObject getDept(String name, Boolean enabled, Long pid, Boolean pidIsNull) {
+        String response = managerGet("/api/dept")
+                .form("name", name)
+                .form("enabled", enabled)
+                .form("pid", pid)
+                .form("pidIsNull", pidIsNull)
+                .execute().body();
+        return JSONUtil.parseObj(response);
+    }
 }

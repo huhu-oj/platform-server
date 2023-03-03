@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="love.huhu.platform.mapper.DeptMapper">
+
+    <resultMap id="BaseResultMap" type="love.huhu.platform.domain.Dept">
+            <id property="deptId" column="dept_id" jdbcType="BIGINT"/>
+            <result property="pid" column="pid" jdbcType="BIGINT"/>
+            <result property="subCount" column="sub_count" jdbcType="INTEGER"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="deptSort" column="dept_sort" jdbcType="INTEGER"/>
+            <result property="enabled" column="enabled" jdbcType="BIT"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        dept_id,pid,sub_count,
+        name,dept_sort,enabled,
+        create_by,update_by,create_time,
+        update_time
+    </sql>
+</mapper>
