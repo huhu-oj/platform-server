@@ -44,12 +44,12 @@ public class TestController {
     }
     @AuthorizationRequired
     @PutMapping
-    public ResponseEntity<Object> updateTest(@RequestBody Test test) {
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Object> updateTest(@RequestBody TestDto test) {
+        return new ResponseEntity<>(managerClient.updateTest(test),HttpStatus.OK);
     }
     @AuthorizationRequired
     @DeleteMapping
     public ResponseEntity<Object> deleteTest(Long testId) {
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(managerClient.deleteTests(new Long[] {testId}),HttpStatus.OK);
     }
 }

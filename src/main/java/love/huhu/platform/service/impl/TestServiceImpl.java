@@ -33,6 +33,7 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
         test.setUserId(UserHolder.getUserId());
         Test toInsert = new Test();
         BeanUtils.copyProperties(test,toInsert);
+        toInsert.setExaminationPaperId(test.getExaminationPaper().getId());
         baseMapper.insert(toInsert);
         return baseMapper.saveTestDept(toInsert.getId(), test.getDepts());
     }

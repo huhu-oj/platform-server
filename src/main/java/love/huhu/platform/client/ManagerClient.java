@@ -14,7 +14,9 @@ import love.huhu.platform.config.porperties.AuthorizationProperties;
 import love.huhu.platform.domain.*;
 import love.huhu.platform.dto.UserLoginDto;
 import love.huhu.platform.service.UserService;
+import love.huhu.platform.service.dto.TestDto;
 import love.huhu.platform.utils.RedisUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -175,17 +177,17 @@ public class ManagerClient {
                 .execute().body();
         return JSONUtil.parseObj(response);
     }
-    public JSONObject updateTest(Test test) {
-        String response = managerGet("/api/test")
+    public JSONObject updateTest(TestDto test) {
+        String response = managerPut("/api/test")
                 .body(JSONUtil.toJsonStr(test))
                 .execute().body();
-        return JSONUtil.parseObj(response);
+        return null;
     }
     public JSONObject deleteTests(Long[] testIds) {
         String response = managerDel("/api/test")
                 .body(Arrays.toString(testIds))
                 .execute().body();
-        return JSONUtil.parseObj(response);
+        return null;
     }
 
     public JSONObject getExecuteResult() {
