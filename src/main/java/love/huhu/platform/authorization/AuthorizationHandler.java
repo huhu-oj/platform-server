@@ -45,6 +45,7 @@ public class AuthorizationHandler {
         log.debug("切割token：{}",token);
         //校验token
         if (!redisUtils.hasKey(properties.getOnlineKey()+token)) {
+            managerClient.systemLogin();
             throw new RuntimeException("token过期");
         }
         //解析token

@@ -222,9 +222,10 @@ public class ManagerClient {
     }
 
     public List<JudgeMachine> getEnabledJudgeMachine() {
-        String response = managerGet("/api/judgeMachine")
-                .form("enabled", true).execute().body();
-        return JSONUtil.toList(JSONUtil.parseObj(response).getStr("content"), JudgeMachine.class);
+        String response = managerGet("/api/judgeMachine/online")
+//                .form("enabled", true)
+                .execute().body();
+        return JSONUtil.toList(response, JudgeMachine.class);
     }
 
     public JSONObject getDept(String name, Boolean enabled, Long pid, Boolean pidIsNull) {

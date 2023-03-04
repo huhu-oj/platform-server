@@ -29,12 +29,12 @@ public class JudgeClient {
     private final AnswerRecordService answerRecordService;
     public void judge(AnswerRecord record) {
         //获取判题机
-//        if (judgeMachines == null || judgeMachines.isEmpty()) {
         judgeMachines = managerClient.getEnabledJudgeMachine();
-//        }
+        if (judgeMachines.isEmpty()) {
+            throw new RuntimeException("暂无判题资源");
+        }
         //随机获取判题机
         JudgeMachine judgeMachine = judgeMachines.get(new Double(Math.floor(Math.random() * judgeMachines.size())).intValue());
-        judgeMachine.setUrl("http://127.0.0.1:8888");
 
         //发送判题请求
 
