@@ -107,6 +107,9 @@ public class ManagerClient {
         return JSONUtil.parseObj(response);
     }
     private HttpRequest managerGet(String url) {
+        if (StrUtil.isBlank(token)) {
+            systemLogin();
+        }
         return HttpRequest.get(managerServerApi+url)
                 .header(properties.getHeader(),token);
     }
