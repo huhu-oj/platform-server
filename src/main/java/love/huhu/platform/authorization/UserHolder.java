@@ -16,10 +16,14 @@ public class UserHolder {
      * 初始化用户threadLocal
      *
      */
-    public static void setUser(User user) {
-        Map<String, Object> map = new HashMap<>(1);
+    public static void setUser(User user,String token) {
+        Map<String, Object> map = new HashMap<>(2);
         map.put("user", user);
+        map.put("token",token);
         USER_HOLDER_THREAD_LOCAL.set(map);
+    }
+    public static void  setUser(User user) {
+        setUser(user,null);
     }
 
 
@@ -41,5 +45,10 @@ public class UserHolder {
     public static User getUser() {
         Map<String, Object> map = USER_HOLDER_THREAD_LOCAL.get();
         return ((User) map.get("user"));
+    }
+    public static String getToken() {
+
+        Map<String, Object> map = USER_HOLDER_THREAD_LOCAL.get();
+        return (String) map.get("token");
     }
 }

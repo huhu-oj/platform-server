@@ -78,11 +78,11 @@ public class ManagerClient {
      /**
      * 系统登录接口
      */
-    public User userLogin(UserLoginDto userLoginDto, HttpServletResponse response) {
+    public JSONObject userLogin(UserLoginDto userLoginDto, HttpServletResponse response) {
         JSONObject responseObj = login(userLoginDto);
 
-        response.addCookie(new Cookie("auth", URLUtil.encode(responseObj.getStr("token"))));
-        return JSONUtil.toBean(responseObj.getJSONObject("user").getJSONObject("user"), User.class);
+//        response.addCookie(new Cookie("auth", URLUtil.encode(responseObj.getStr("token"))));
+        return JSONUtil.parseObj(responseObj);
     }
 
     public User getUserByName(String username) {
@@ -234,6 +234,22 @@ public class ManagerClient {
                 .form("enabled", enabled)
                 .form("pid", pid)
                 .form("pidIsNull", pidIsNull)
+                .execute().body();
+        return JSONUtil.parseObj(response);
+    }
+
+    public Object userLogout(String token) {
+        if (!HttpRequest.delete(managerServerApi + "/auth/logout")
+                .header(properties.getHeader(),token)
+                .execute().isOk()) {
+            throw new RuntimeException("退出失败");
+        }
+        return null;
+    }
+
+    public JSONObject getUserInfo(String token) {
+        String response = HttpRequest.get(managerServerApi + "/auth/info")
+                .header(properties.getHeader(), token)
                 .execute().body();
         return JSONUtil.parseObj(response);
     }

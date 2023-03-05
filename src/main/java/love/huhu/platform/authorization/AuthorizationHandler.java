@@ -41,6 +41,7 @@ public class AuthorizationHandler {
         if (!token.startsWith(properties.getTokenStartWith())) {
             throw new RuntimeException("token格式有误");
         }
+        String tokenToSave = token;
         token = token.substring(token.indexOf(" ")+1);
         log.debug("切割token：{}",token);
         //校验token
@@ -53,7 +54,7 @@ public class AuthorizationHandler {
         User user = getUserInfo(username);
 
         //放入threadlocal
-        UserHolder.setUser(user);
+        UserHolder.setUser(user,tokenToSave);
         return true;
     }
 
