@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import love.huhu.platform.client.ManagerClient;
 import love.huhu.platform.config.porperties.AuthorizationProperties;
 import love.huhu.platform.domain.User;
+import love.huhu.platform.service.UserService;
 import love.huhu.platform.utils.RedisUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -24,6 +25,7 @@ public class AuthorizationHandler {
     private final RedisUtils redisUtils;
     private final AuthorizationProperties properties;
     private final ManagerClient managerClient;
+    private final UserService userService;
 
     public boolean handleIdentity(HttpServletRequest request) {
         String token = getTokenHeader(request);
@@ -51,18 +53,17 @@ public class AuthorizationHandler {
         }
         //解析token
         String username = JWTUtil.parseToken(token).getPayload("user").toString();
-        User user = getUserInfo(username);
+        User user = getUserByName(username);
 
         //放入threadlocal
         UserHolder.setUser(user,tokenToSave);
         return true;
     }
 
-    private User getUserInfo(String username) {
-        User user = managerClient.getUserByName(username);
+    private User getUserByName(String username) {
+        User user = userService.lambdaQuery().eq(User::getUsername, username).one();
         return user;
     }
-
     private String getTokenHeader(HttpServletRequest request) {
         String authorization = request.getHeader(properties.getHeader());
         return authorization;

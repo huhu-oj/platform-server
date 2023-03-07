@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import love.huhu.platform.authorization.AuthorizationRequired;
 import love.huhu.platform.client.ManagerClient;
 import love.huhu.platform.domain.Solution;
+import love.huhu.platform.service.dto.SolutionDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +27,8 @@ public class SolutionController {
 
     @AuthorizationRequired
     @PostMapping
-    public ResponseEntity<Object> saveSolution(@RequestBody Solution solution) {
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Object> saveSolution(@RequestBody SolutionDto solution) {
+        return new ResponseEntity<>(managerClient.saveSolution(solution),HttpStatus.OK);
     }
     @AuthorizationRequired
     @PutMapping

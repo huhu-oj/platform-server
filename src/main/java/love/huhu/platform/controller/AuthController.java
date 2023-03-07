@@ -27,7 +27,7 @@ public class AuthController {
     private final ManagerClient managerClient;
     @PostMapping("login")
     public ResponseEntity<Object> login(@RequestBody @Validated UserLoginDto dto, HttpServletResponse response) {
-        return new ResponseEntity<>(managerClient.userLogin(dto, response),HttpStatus.OK);
+        return new ResponseEntity<>(managerClient.userLogin(dto),HttpStatus.OK);
     }
     @PostMapping("register")
     public ResponseEntity<User> register(@RequestBody @Validated UserLoginDto dtoForRegister) {

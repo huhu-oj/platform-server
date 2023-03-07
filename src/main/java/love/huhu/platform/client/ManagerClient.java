@@ -14,6 +14,7 @@ import love.huhu.platform.config.porperties.AuthorizationProperties;
 import love.huhu.platform.domain.*;
 import love.huhu.platform.dto.UserLoginDto;
 import love.huhu.platform.service.UserService;
+import love.huhu.platform.service.dto.SolutionDto;
 import love.huhu.platform.service.dto.TestDto;
 import love.huhu.platform.utils.RedisUtils;
 import org.springframework.beans.BeanUtils;
@@ -77,18 +78,10 @@ public class ManagerClient {
      /**
      * 系统登录接口
      */
-    public JSONObject userLogin(UserLoginDto userLoginDto, HttpServletResponse response) {
-        JSONObject responseObj = login(userLoginDto);
-
-//        response.addCookie(new Cookie("auth", URLUtil.encode(responseObj.getStr("token"))));
-        return JSONUtil.parseObj(responseObj);
+    public JSONObject userLogin(UserLoginDto userLoginDto) {
+        return login(userLoginDto);
     }
 
-    public User getUserByName(String username) {
-        User user = userService.lambdaQuery().eq(User::getUsername, username).one();
-        System.out.println(user);
-        return user;
-    }
 
     public JSONObject getGraphicCode() {
         String response = managerGet("/auth/code")
@@ -160,9 +153,8 @@ public class ManagerClient {
                 .execute().body();
         return JSONUtil.parseObj(response);
     }
-    public JSONObject saveSolution(Solution solution) {
-        // todo 交给谁做
-        String response = managerGet("/api/solution")
+    public JSONObject saveSolution(SolutionDto solution) {
+        String response = managerPost("/api/solution")
                 .body(JSONUtil.toJsonStr(solution))
                 .execute().body();
         return JSONUtil.parseObj(response);
@@ -254,5 +246,11 @@ public class ManagerClient {
                 .header(properties.getHeader(), token)
                 .execute().body();
         return JSONUtil.parseObj(response);
+    }
+
+    public JSONArray getLabelList() {
+        String response = managerGet("/api/label/all")
+                .execute().body();
+        return JSONUtil.parseArray(response);
     }
 }
