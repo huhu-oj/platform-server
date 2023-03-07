@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="love.huhu.platform.mapper.TestUserMapper">
+
+    <resultMap id="BaseResultMap" type="love.huhu.platform.domain.TestUser">
+            <id property="testId" column="test_id" jdbcType="BIGINT"/>
+            <id property="userId" column="user_id" jdbcType="BIGINT"/>
+            <result property="score" column="score" jdbcType="DOUBLE"/>
+            <result property="testJsonStr" column="test_json_str" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        test_id,user_id,score,
+        test_json_str
+    </sql>
+</mapper>

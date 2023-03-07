@@ -1,12 +1,15 @@
 package love.huhu.platform.controller;
 
 import cn.hutool.json.JSONObject;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import love.huhu.platform.authorization.AuthorizationRequired;
 import love.huhu.platform.authorization.UserHolder;
 import love.huhu.platform.client.ManagerClient;
 import love.huhu.platform.domain.Test;
+import love.huhu.platform.domain.TestUser;
 import love.huhu.platform.service.TestService;
+import love.huhu.platform.service.TestUserService;
 import love.huhu.platform.service.dto.TestDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +28,7 @@ import java.util.List;
 public class TestController {
     private final ManagerClient managerClient;
     private final TestService testService;
+    private final TestUserService testUserService;
     @AuthorizationRequired
     @GetMapping
     public ResponseEntity<Object> getMyTest(Long testId) {
@@ -37,6 +41,12 @@ public class TestController {
         return new ResponseEntity<>(myTest,HttpStatus.OK);
     }
 
+    @ApiOperation("保存测验记录")
+    @AuthorizationRequired
+    @PostMapping("record")
+    public ResponseEntity<Object> saveTestRecord(@RequestBody TestUser test) {
+        return new ResponseEntity<>(testUserService.save(test),HttpStatus.OK);
+    }
     @AuthorizationRequired
     @PostMapping
     public ResponseEntity<Object> saveTest(@RequestBody TestDto test) {

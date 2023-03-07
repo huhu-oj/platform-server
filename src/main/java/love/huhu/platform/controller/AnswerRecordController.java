@@ -25,13 +25,13 @@ public class AnswerRecordController {
     @AuthorizationRequired
     public ResponseEntity<Object> getAnswerRecords(Long problemId,Long answerRecordId) {
 
-        return new ResponseEntity<>(managerClient.getAnswerRecords(problemId, UserHolder.getUserId(), answerRecordId),HttpStatus.OK);
+        return new ResponseEntity<>(managerClient.getAnswerRecords(null, problemId, UserHolder.getUserId(), answerRecordId),HttpStatus.OK);
     }
     @AuthorizationRequired
     @GetMapping("teacher")
     public ResponseEntity<Object> getAnswerRecordsForTeacher(Long problemId,Long studentId) {
 
-        return new ResponseEntity<>(managerClient.getAnswerRecords(problemId, studentId, null),HttpStatus.OK);
+        return new ResponseEntity<>(managerClient.getAnswerRecords(null, problemId, studentId, null),HttpStatus.OK);
     }
 
 }

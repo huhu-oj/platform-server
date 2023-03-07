@@ -89,8 +89,9 @@ public class ManagerClient {
 
         return JSONUtil.parseObj(response);
     }
-    public JSONObject getAnswerRecords(Long problemId, Long studentId,Long answerRecordId) {
+    public JSONObject getAnswerRecords(Long testId, Long problemId, Long studentId,Long answerRecordId) {
         String response = managerGet("/api/answerRecord")
+                .form("testId",testId)
                 .form("problemId", problemId)
                 .form("userId", studentId)
                 .form("id", answerRecordId)
@@ -210,9 +211,15 @@ public class ManagerClient {
     }
     public JSONObject getTestByIds(List<Long> testIds) {
         String response = managerGet("/api/test")
-                .body(JSONUtil.toJsonStr(testIds))
+                .form("ids",testIds)
                 .execute().body();
         return JSONUtil.parseObj(response);
+    }
+    public JSONArray getTestByIdsWithoutPage(List<Long> testIds) {
+        String response = managerGet("/api/test/all")
+                .form("id",testIds)
+                .execute().body();
+        return JSONUtil.parseArray(response);
     }
 
     public List<JudgeMachine> getEnabledJudgeMachine() {

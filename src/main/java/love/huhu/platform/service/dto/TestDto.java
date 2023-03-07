@@ -30,7 +30,7 @@ public class TestDto {
 
     @NotNull
     @ApiModelProperty(value = "试卷")
-    private ExaminationPaper examinationPaper;
+    private ExaminationPaperDto examinationPaper;
 
     @NotNull
     @ApiModelProperty("拥有的判题记录")
