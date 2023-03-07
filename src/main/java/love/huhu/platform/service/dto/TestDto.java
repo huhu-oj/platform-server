@@ -33,6 +33,9 @@ public class TestDto {
     private ExaminationPaper examinationPaper;
 
     @NotNull
+    @ApiModelProperty("拥有的判题记录")
+    private List<AnswerRecordDto> answerRecords;
+    @NotNull
     @ApiModelProperty(value = "开始时间")
     @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-ddTHH:mm:ss")
     private DateTime startTime;

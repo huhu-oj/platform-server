@@ -75,6 +75,9 @@ public class AnswerRecord implements Serializable {
     @ApiModelProperty(value = "执行结果")
     private Long executeResultId;
 
+    @ApiModelProperty(value = "所属测验")
+    private Long testId;
+
     @ApiModelProperty(value = "备注")
     private String note;
 

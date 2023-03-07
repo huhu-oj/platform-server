@@ -48,6 +48,7 @@ public class AnswerRecordDto implements Serializable {
     @NotNull
     @ApiModelProperty(value = "所属用户")
     private Long userId;
+    private TestDto test;
 
     @NotBlank
     @ApiModelProperty(value = "代码")
