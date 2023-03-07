@@ -72,8 +72,7 @@ public class ManagerClient {
                 .body(request)
                 .execute().body();
         //处理响应
-        JSONObject responseObj = JSONUtil.parseObj(response);
-        return responseObj;
+        return JSONUtil.parseObj(response);
     }
      /**
      * 系统登录接口
@@ -206,22 +205,22 @@ public class ManagerClient {
         return JSONUtil.parseObj(response);
     }
 
-    public JSONArray getMyTest(Long userId, Long testId) {
+    public JSONObject getMyTest(Long userId, Long testId) {
         String response = managerGet("/api/test")
                 .form("userId",userId)
                 .form("id",testId)
                 .execute().body();
         JSONArray array = JSONUtil.parseObj(response).getJSONArray("content");
         if (array.toArray().length != 0) {
-            return array;
+            return JSONUtil.parseObj(response);
         }
         return null;
     }
-    public JSONArray getTestByIds(List<Long> testIds) {
-        String response = managerGet("/api/test/ids")
+    public JSONObject getTestByIds(List<Long> testIds) {
+        String response = managerGet("/api/test")
                 .body(JSONUtil.toJsonStr(testIds))
                 .execute().body();
-        return JSONUtil.parseArray(response);
+        return JSONUtil.parseObj(response);
     }
 
     public List<JudgeMachine> getEnabledJudgeMachine() {
