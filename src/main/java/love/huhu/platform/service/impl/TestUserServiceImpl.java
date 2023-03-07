@@ -46,13 +46,14 @@ public class TestUserServiceImpl extends ServiceImpl<TestUserMapper, TestUser>
         List<AnswerRecordDto> userAnswerRecords = testDto.getAnswerRecords().stream().filter(answerRecordDto -> UserHolder.getUserId().equals(answerRecordDto.getUserId())).collect(Collectors.toList());
         //计算分数
         BigDecimal sumScore = BigDecimal.ZERO;
-        problems.forEach(problem->{
+        for (ExaminationPaperProblemDto problem : problems) {
             if (userAnswerRecords.stream()
                     .filter(answerRecordDto -> problem.getProblem().getId().equals(answerRecordDto.getProblem().getId()))
                     .anyMatch(answerRecordDto -> answerRecordDto.getExecuteResult().getId() == 1)) {
-                sumScore.add(BigDecimal.valueOf(problem.getScore()));
+                sumScore = sumScore.add(BigDecimal.valueOf(problem.getScore()));
             }
-        });
+        }
+
         entity.setScore(sumScore.doubleValue());
         //序列化测验数据
         entity.setTestJsonStr(JSONUtil.toJsonStr(testDto));
