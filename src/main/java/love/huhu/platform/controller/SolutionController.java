@@ -2,6 +2,7 @@ package love.huhu.platform.controller;
 
 import lombok.RequiredArgsConstructor;
 import love.huhu.platform.authorization.AuthorizationRequired;
+import love.huhu.platform.authorization.UserHolder;
 import love.huhu.platform.client.ManagerClient;
 import love.huhu.platform.domain.Solution;
 import love.huhu.platform.service.dto.SolutionDto;
@@ -28,6 +29,7 @@ public class SolutionController {
     @AuthorizationRequired
     @PostMapping
     public ResponseEntity<Object> saveSolution(@RequestBody SolutionDto solution) {
+        solution.setUserId(UserHolder.getUserId());
         return new ResponseEntity<>(managerClient.saveSolution(solution),HttpStatus.OK);
     }
     @AuthorizationRequired
