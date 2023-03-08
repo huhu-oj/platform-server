@@ -47,6 +47,14 @@ public class TestController {
     public ResponseEntity<Object> saveTestRecord(@RequestBody TestUser test) {
         return new ResponseEntity<>(testUserService.save(test),HttpStatus.OK);
     }
+    @ApiOperation("查询我的测验记录")
+    @AuthorizationRequired
+    @GetMapping("record")
+    public ResponseEntity<Object> getTestRecord(Long testId) {
+        return new ResponseEntity<>(testUserService.lambdaQuery()
+                .ge(TestUser::getTestId,testId)
+                .ge(TestUser::getUserId,UserHolder.getUserId()).one(),HttpStatus.OK);
+    }
     @AuthorizationRequired
     @PostMapping
     public ResponseEntity<Object> saveTest(@RequestBody TestDto test) {
