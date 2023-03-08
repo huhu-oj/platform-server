@@ -29,7 +29,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * @author ZhangHouYing
  * @date 2019-08-10 15:46
  */
-@ServerEndpoint("/webSocket/{sid}")
+@ServerEndpoint("/webSocket")
 @Slf4j
 @Component
 public class WebSocketServer {
@@ -45,23 +45,18 @@ public class WebSocketServer {
 	private Session session;
 
 	/**
-	 * 接收sid
-	 */
-	private String sid="";
-	/**
 	 * 连接建立成功调用的方法
 	 * */
 	@OnOpen
-	public void onOpen(Session session,@PathParam("sid") String sid) {
+	public void onOpen(Session session) {
 		this.session = session;
 		//如果存在就先删除一个，防止重复推送消息
-		for (WebSocketServer webSocket:webSocketSet) {
-			if (webSocket.sid.equals(sid)) {
-				webSocketSet.remove(webSocket);
-			}
-		}
+//		for (WebSocketServer webSocket:webSocketSet) {
+//			if (webSocket.sid.equals(sid)) {
+//				webSocketSet.remove(webSocket);
+//			}
+//		}
 		webSocketSet.add(this);
-		this.sid=sid;
 	}
 
 	/**
@@ -77,7 +72,7 @@ public class WebSocketServer {
 	 * @param message 客户端发送过来的消息*/
 	@OnMessage
 	public void onMessage(String message, Session session) {
-		log.info("收到来"+sid+"的信息:"+message);
+		log.info("收到的信息:"+message);
 		//群发消息
 		for (WebSocketServer item : webSocketSet) {
 			try {
@@ -104,36 +99,11 @@ public class WebSocketServer {
 	/**
 	 * 群发自定义消息
 	 * */
-	public static void sendInfo(SocketMsg socketMsg,@PathParam("sid") String sid) throws IOException {
+	public static void sendInfo(SocketMsg socketMsg) throws IOException {
 		String message = JSONUtil.toJsonStr(socketMsg);
-		log.info("推送消息到"+sid+"，推送内容:"+message);
+		log.info("推送消息到，推送内容:"+message);
 		for (WebSocketServer item : webSocketSet) {
-			try {
-				//这里可以设定只推送给这个sid的，为null则全部推送
-				if(sid==null) {
-					item.sendMessage(message);
-				}else if(item.sid.equals(sid)){
-					item.sendMessage(message);
-				}
-			} catch (IOException ignored) { }
+			item.sendMessage(message);
 		}
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		WebSocketServer that = (WebSocketServer) o;
-		return Objects.equals(session, that.session) &&
-				Objects.equals(sid, that.sid);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(session, sid);
 	}
 }
