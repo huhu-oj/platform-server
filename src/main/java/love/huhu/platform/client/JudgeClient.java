@@ -8,11 +8,14 @@ import love.huhu.platform.authorization.UserHolder;
 import love.huhu.platform.domain.AnswerRecord;
 import love.huhu.platform.domain.JudgeMachine;
 import love.huhu.platform.service.AnswerRecordService;
+import love.huhu.platform.service.dto.JudgeMachineDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @Description
@@ -22,20 +25,13 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class JudgeClient {
-    private List<JudgeMachine> judgeMachines;
+    private List<JudgeMachineDto> judgeMachines;
     @Value("${api.manager-server}")
     String managerServerApi;
     private final ManagerClient managerClient;
     private final AnswerRecordService answerRecordService;
     public void judge(AnswerRecord record) {
-        //获取判题机
-        judgeMachines = managerClient.getEnabledJudgeMachine();
-        if (judgeMachines.isEmpty()) {
-            throw new RuntimeException("暂无判题资源");
-        }
-        //随机获取判题机
-        JudgeMachine judgeMachine = judgeMachines.get(new Double(Math.floor(Math.random() * judgeMachines.size())).intValue());
-
+        JudgeMachineDto judgeMachine = getRandomHost(record.getLanguageId());
         //发送判题请求
 
         String result = HttpRequest.post(judgeMachine.getUrl() + "/api/v1/judge")
@@ -53,22 +49,27 @@ public class JudgeClient {
 
     }
 
-    public AnswerRecord judgeTest(String code, String input) {
+    private JudgeMachineDto getRandomHost(Long languageId) {
         //获取判题机
-//        if (judgeMachines == null || judgeMachines.isEmpty()) {
         judgeMachines = managerClient.getEnabledJudgeMachine();
-
-//        }
+        if (judgeMachines.isEmpty()) {
+            throw new RuntimeException("暂无判题资源");
+        }
         //随机获取判题机
-        JudgeMachine judgeMachine = judgeMachines.get(new Double(Math.floor(Math.random() * judgeMachines.size())).intValue());
-        judgeMachine.setUrl("http://127.0.0.1:8888");
-        //包装请求
-        HashMap<String, String> map = new HashMap<>();
-        map.put("code",code);
-        map.put("input",input);
+        List<JudgeMachineDto> supportedJudgeMachines = judgeMachines.stream()
+                .filter(judgeMachine -> judgeMachine.getLanguages().stream().anyMatch(languageDto -> Objects.equals(languageDto.getId(), languageId)))
+                .collect(Collectors.toList());
+
+        return supportedJudgeMachines.get(new Double(Math.floor(Math.random() * judgeMachines.size())).intValue());
+
+    }
+
+    public AnswerRecord judgeTest(AnswerRecord record) {
+        //获取判题机
+        JudgeMachineDto judgeMachine = getRandomHost(record.getLanguageId());
         //发送判题请求
         String result = HttpRequest.post(judgeMachine.getUrl() + "/api/v1/test")
-                .body(JSONUtil.parseObj(map).toString())
+                .body(JSONUtil.toJsonStr(record))
                 .execute().body();
         AnswerRecord answerRecord = dealResult(result);
         return answerRecord;

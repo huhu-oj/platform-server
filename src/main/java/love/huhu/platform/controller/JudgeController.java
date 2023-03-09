@@ -33,8 +33,8 @@ public class JudgeController {
     }
     @AuthorizationRequired
     @PostMapping("test")
-    public ResponseEntity<Object> test(String code,String input) {
-        AnswerRecord answerRecord = judgeClient.judgeTest(code,input);
-        return new ResponseEntity<>(answerRecord,HttpStatus.OK);
+    public ResponseEntity<Object> test(@RequestBody AnswerRecord answerRecord) {
+        AnswerRecord result = judgeClient.judgeTest(answerRecord);
+        return new ResponseEntity<>(result,HttpStatus.OK);
     }
 }

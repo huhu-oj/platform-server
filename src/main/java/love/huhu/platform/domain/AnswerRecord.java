@@ -17,6 +17,7 @@ package love.huhu.platform.domain;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -84,6 +85,8 @@ public class AnswerRecord implements Serializable {
     @ApiModelProperty(value = "创建时间")
     private Timestamp createTime;
 
+    @TableField(exist = false)
+    private String input;
     public void copy(AnswerRecord source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }

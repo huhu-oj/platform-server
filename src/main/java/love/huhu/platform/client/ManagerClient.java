@@ -14,6 +14,7 @@ import love.huhu.platform.config.porperties.AuthorizationProperties;
 import love.huhu.platform.domain.*;
 import love.huhu.platform.dto.UserLoginDto;
 import love.huhu.platform.service.UserService;
+import love.huhu.platform.service.dto.JudgeMachineDto;
 import love.huhu.platform.service.dto.SolutionDto;
 import love.huhu.platform.service.dto.TestDto;
 import love.huhu.platform.utils.RedisUtils;
@@ -222,11 +223,11 @@ public class ManagerClient {
         return JSONUtil.parseArray(response);
     }
 
-    public List<JudgeMachine> getEnabledJudgeMachine() {
+    public List<JudgeMachineDto> getEnabledJudgeMachine() {
         String response = managerGet("/api/judgeMachine/online")
 //                .form("enabled", true)
                 .execute().body();
-        return JSONUtil.toList(response, JudgeMachine.class);
+        return JSONUtil.toList(response, JudgeMachineDto.class);
     }
 
     public JSONObject getDept(String name, Boolean enabled, Long pid, Boolean pidIsNull) {
