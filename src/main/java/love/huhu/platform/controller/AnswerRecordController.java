@@ -27,6 +27,12 @@ public class AnswerRecordController {
 
         return new ResponseEntity<>(managerClient.getAnswerRecords(testId, problemId, UserHolder.getUserId(), answerRecordId),HttpStatus.OK);
     }
+    @GetMapping("all")
+    @AuthorizationRequired
+    public ResponseEntity<Object> getAllAnswerRecords(Long testId, Long problemId,Long answerRecordId) {
+
+        return new ResponseEntity<>(managerClient.getAllAnswerRecords(testId, problemId, UserHolder.getUserId(), answerRecordId),HttpStatus.OK);
+    }
     @AuthorizationRequired
     @GetMapping("teacher")
     public ResponseEntity<Object> getAnswerRecordsForTeacher(Long problemId,Long studentId) {

@@ -100,6 +100,16 @@ public class ManagerClient {
 
         return JSONUtil.parseObj(response);
     }
+    public JSONArray getAllAnswerRecords(Long testId, Long problemId, Long studentId,Long answerRecordId) {
+        String response = managerGet("/api/answerRecord/all")
+                .form("testId",testId)
+                .form("problemId", problemId)
+                .form("userId", studentId)
+                .form("id", answerRecordId)
+                .execute().body();
+
+        return JSONUtil.parseArray(response);
+    }
     private HttpRequest managerGet(String url) {
         if (StrUtil.isBlank(token)) {
             systemLogin();
