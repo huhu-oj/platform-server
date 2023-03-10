@@ -43,11 +43,11 @@ public class TestUserServiceImpl extends ServiceImpl<TestUserMapper, TestUser>
         //拿到用户在这场测验中提交的记录
 //        JSONObject answerRecords = managerClient.getAnswerRecords(entity.getTestId(), null, entity.getUserId(), null);
 //        List<AnswerRecordDto> toComputeScore = JSONUtil.toList(answerRecords.getJSONArray("content"), AnswerRecordDto.class);
-        List<AnswerRecordDto> userAnswerRecords = testDto.getAnswerRecords().stream().filter(answerRecordDto -> UserHolder.getUserId().equals(answerRecordDto.getUserId())).collect(Collectors.toList());
+        testDto.setAnswerRecords(testDto.getAnswerRecords().stream().filter(answerRecordDto -> UserHolder.getUserId().equals(answerRecordDto.getUserId())).collect(Collectors.toList()));
         //计算分数
         BigDecimal sumScore = BigDecimal.ZERO;
         for (ExaminationPaperProblemDto problem : problems) {
-            if (userAnswerRecords.stream()
+            if (testDto.getAnswerRecords().stream()
                     .filter(answerRecordDto -> problem.getProblem().getId().equals(answerRecordDto.getProblem().getId()))
                     .anyMatch(answerRecordDto -> answerRecordDto.getExecuteResult().getId() == 1)) {
                 sumScore = sumScore.add(BigDecimal.valueOf(problem.getScore()));

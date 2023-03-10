@@ -55,6 +55,13 @@ public class TestController {
                 .ge(TestUser::getTestId,testId)
                 .ge(TestUser::getUserId,UserHolder.getUserId()).one(),HttpStatus.OK);
     }
+    @ApiOperation("查询我的所有测验记录")
+    @AuthorizationRequired
+    @GetMapping("record/all")
+    public ResponseEntity<Object> getAllTestRecord() {
+        return new ResponseEntity<>(testUserService.lambdaQuery()
+                .ge(TestUser::getUserId,UserHolder.getUserId()).one(),HttpStatus.OK);
+    }
     @AuthorizationRequired
     @PostMapping
     public ResponseEntity<Object> saveTest(@RequestBody TestDto test) {
