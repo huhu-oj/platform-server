@@ -1,9 +1,11 @@
 package love.huhu.platform.controller;
 
 import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import love.huhu.platform.authorization.AuthorizationRequired;
+import love.huhu.platform.authorization.PermissionEnum;
 import love.huhu.platform.authorization.UserHolder;
 import love.huhu.platform.client.ManagerClient;
 import love.huhu.platform.domain.Test;
@@ -15,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,18 +32,23 @@ public class TestController {
     private final ManagerClient managerClient;
     private final TestService testService;
     private final TestUserService testUserService;
-    @AuthorizationRequired
+    @AuthorizationRequired(PermissionEnum.STUDENT)
     @GetMapping
     public ResponseEntity<Object> getMyTest(Long testId) {
+        List<Long> myTestIds = testService.getMyTestIds(UserHolder.getUser().getDept().getId());
+        JSONObject myTest = managerClient.getTestByIds(myTestIds);
+        return new ResponseEntity<>(myTest,HttpStatus.OK);
+    }
+    @AuthorizationRequired(PermissionEnum.TEACHER)
+    @GetMapping("teacher")
+    public ResponseEntity<Object> getMyTestForTeacher(Long testId) {
         Object myTest = managerClient.getMyTest(UserHolder.getUserId(),testId);
 //        myTest = null;
         if (myTest == null) {
-            List<Long> myTestIds = testService.getMyTestIds(UserHolder.getUser().getDeptId());
-            myTest = managerClient.getTestByIds(myTestIds);
+            return new ResponseEntity<>("{\"content\": []}",HttpStatus.OK);
         }
         return new ResponseEntity<>(myTest,HttpStatus.OK);
     }
-
     @ApiOperation("保存测验记录")
     @AuthorizationRequired
     @PostMapping("record")
@@ -62,17 +70,17 @@ public class TestController {
         return new ResponseEntity<>(testUserService.lambdaQuery()
                 .ge(TestUser::getUserId,UserHolder.getUserId()).one(),HttpStatus.OK);
     }
-    @AuthorizationRequired
+    @AuthorizationRequired(PermissionEnum.TEACHER)
     @PostMapping
     public ResponseEntity<Object> saveTest(@RequestBody TestDto test) {
         return new ResponseEntity<>(testService.saveTest(test),HttpStatus.OK);
     }
-    @AuthorizationRequired
+    @AuthorizationRequired(PermissionEnum.TEACHER)
     @PutMapping
     public ResponseEntity<Object> updateTest(@RequestBody TestDto test) {
         return new ResponseEntity<>(managerClient.updateTest(test),HttpStatus.OK);
     }
-    @AuthorizationRequired
+    @AuthorizationRequired(PermissionEnum.TEACHER)
     @DeleteMapping
     public ResponseEntity<Object> deleteTest(Long testId) {
         return new ResponseEntity<>(managerClient.deleteTests(new Long[] {testId}),HttpStatus.OK);

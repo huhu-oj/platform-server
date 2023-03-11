@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import love.huhu.platform.client.ManagerClient;
 import love.huhu.platform.config.porperties.AuthorizationProperties;
+import love.huhu.platform.domain.Role;
 import love.huhu.platform.domain.User;
 import love.huhu.platform.service.UserService;
 import love.huhu.platform.utils.RedisUtils;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.Set;
 
 /**
  * @Author nwl20
@@ -61,7 +64,7 @@ public class AuthorizationHandler {
     }
 
     private User getUserByName(String username) {
-        User user = userService.lambdaQuery().eq(User::getUsername, username).one();
+        User user = managerClient.getUserByName(username);
         return user;
     }
     private String getTokenHeader(HttpServletRequest request) {
@@ -69,7 +72,13 @@ public class AuthorizationHandler {
         return authorization;
     }
 
-    public boolean handleAuth(PermissionEnum permission) {
-        throw new UnsupportedOperationException("未实现权限控制");
+    public boolean handleAuth(PermissionEnum[] permissions) {
+        if (Arrays.asList(permissions).contains(PermissionEnum.ANY)) {
+            return true;
+        }
+        //获取用户的角色
+        Set<Role> roles = UserHolder.getUser().getRoles();
+        return roles.stream().anyMatch(role ->
+            Arrays.stream(permissions).anyMatch(permissionEnum -> permissionEnum.getRoleName().equalsIgnoreCase(role.getName())));
     }
 }

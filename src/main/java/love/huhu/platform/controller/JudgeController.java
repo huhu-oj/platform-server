@@ -2,6 +2,7 @@ package love.huhu.platform.controller;
 
 import lombok.RequiredArgsConstructor;
 import love.huhu.platform.authorization.AuthorizationRequired;
+import love.huhu.platform.authorization.PermissionEnum;
 import love.huhu.platform.client.JudgeClient;
 import love.huhu.platform.domain.AnswerRecord;
 import org.springframework.http.HttpStatus;
@@ -25,13 +26,13 @@ public class JudgeController {
 
     private final JudgeClient judgeClient;
 
-    @AuthorizationRequired
+    @AuthorizationRequired(PermissionEnum.STUDENT)
     @PostMapping
     public ResponseEntity<Object> judge(@RequestBody @Valid AnswerRecord record) {
         judgeClient.judge(record);
         return new ResponseEntity<>(record,HttpStatus.OK);
     }
-    @AuthorizationRequired
+    @AuthorizationRequired(PermissionEnum.STUDENT)
     @PostMapping("test")
     public ResponseEntity<Object> test(@RequestBody AnswerRecord answerRecord) {
         AnswerRecord result = judgeClient.judgeTest(answerRecord);

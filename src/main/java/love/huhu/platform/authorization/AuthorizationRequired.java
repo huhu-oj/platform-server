@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AuthorizationRequired {
     @AliasFor("permission")
-    PermissionEnum value() default PermissionEnum.ANY;
+    PermissionEnum[] value() default PermissionEnum.ANY;
     @AliasFor("value")
-    PermissionEnum permission() default PermissionEnum.ANY;
+    PermissionEnum[] permission() default PermissionEnum.ANY;
 }

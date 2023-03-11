@@ -222,7 +222,7 @@ public class ManagerClient {
     }
     public JSONObject getTestByIds(List<Long> testIds) {
         String response = managerGet("/api/test")
-                .form("ids",testIds)
+                .form("id",testIds)
                 .execute().body();
         return JSONUtil.parseObj(response);
     }
@@ -270,5 +270,12 @@ public class ManagerClient {
         String response = managerGet("/api/label/all")
                 .execute().body();
         return JSONUtil.parseArray(response);
+    }
+
+    public User getUserByName(String username) {
+        String response = managerGet("/api/users/name")
+                .form("username", username)
+                .execute().body();
+        return JSONUtil.toBean(response,User.class);
     }
 }

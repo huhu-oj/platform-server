@@ -5,17 +5,19 @@ package love.huhu.platform.authorization;
  * @create 2022/9/29 11:05
  */
 public enum PermissionEnum {
-    ADMIN(1),
+    ADMIN("管理员"),
 
-    PROBLEM_MANAGER(2),
+    ANY("any"),
+    TEACHER("老师"),
+    STUDENT("学生");
 
-    ANY(3);
-    PermissionEnum(Integer id) {
-        this.id = id;
+
+    PermissionEnum(String roleName) {
+        this.roleName = roleName;
     }
-    private Integer id;
+    private String roleName;
 
-    public Integer getId() {
-        return id;
+    public String getRoleName() {
+        return roleName;
     }
 }

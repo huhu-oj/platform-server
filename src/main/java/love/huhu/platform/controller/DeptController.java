@@ -2,6 +2,7 @@ package love.huhu.platform.controller;
 
 import lombok.RequiredArgsConstructor;
 import love.huhu.platform.authorization.AuthorizationRequired;
+import love.huhu.platform.authorization.PermissionEnum;
 import love.huhu.platform.authorization.UserHolder;
 import love.huhu.platform.client.ManagerClient;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class DeptController {
 
     private final ManagerClient managerClient;
     @GetMapping
-    @AuthorizationRequired
+    @AuthorizationRequired(PermissionEnum.TEACHER)
     public ResponseEntity<Object> getDept(String name, Boolean enabled, Long pid, Boolean pidIsNull) {
         return new ResponseEntity<>(managerClient.getDept(name,enabled,pid,pidIsNull), HttpStatus.OK);
     }

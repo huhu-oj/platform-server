@@ -39,7 +39,7 @@ public class RequestInterceptor implements HandlerInterceptor {
             //不需要权限
             return true;
         }
-        PermissionEnum permission = annotation.value();
+        PermissionEnum[] permission = annotation.value();
 
         try {
             authorizationHandler.handleIdentity(request);
@@ -49,9 +49,12 @@ public class RequestInterceptor implements HandlerInterceptor {
         }
 
         try {
-            authorizationHandler.handleAuth(permission);
+            if (!authorizationHandler.handleAuth(permission)) {
+                return false;
+            }
         } catch (Exception e) {
             log.error(e.getMessage());
+            return false;
         }
         return true;
     }
