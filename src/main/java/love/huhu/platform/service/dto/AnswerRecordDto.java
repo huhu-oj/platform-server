@@ -86,11 +86,11 @@ public class AnswerRecordDto implements Serializable {
     @ApiModelProperty(value = "备注")
     private String note;
     @ApiModelProperty(value = "更新时间")
-    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-ddTHH:mm:ss")
+//    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-ddTHH:mm:ss")
     private DateTime createTime;
 
     @ApiModelProperty(value = "创建时间")
-    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-ddTHH:mm:ss")
+//    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-ddTHH:mm:ss")
     private DateTime updateTime;
     public void copy(AnswerRecordDto source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

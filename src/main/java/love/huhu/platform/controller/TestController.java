@@ -35,8 +35,18 @@ public class TestController {
     @AuthorizationRequired(PermissionEnum.STUDENT)
     @GetMapping
     public ResponseEntity<Object> getMyTest(Long testId) {
+        JSONObject myTest = null;
+
         List<Long> myTestIds = testService.getMyTestIds(UserHolder.getUser().getDept().getId());
-        JSONObject myTest = managerClient.getTestByIds(myTestIds);
+        if (testId == null) {
+            myTest = managerClient.getTestByIds(myTestIds);
+        } else {
+            if (myTestIds.contains(testId)) {
+                myTest = managerClient.getTest(testId);
+            } else {
+                throw new RuntimeException("你未被安排这场测验");
+            }
+        }
         return new ResponseEntity<>(myTest,HttpStatus.OK);
     }
     @AuthorizationRequired(PermissionEnum.TEACHER)

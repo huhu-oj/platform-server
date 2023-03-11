@@ -14,6 +14,7 @@ import love.huhu.platform.config.porperties.AuthorizationProperties;
 import love.huhu.platform.domain.*;
 import love.huhu.platform.dto.UserLoginDto;
 import love.huhu.platform.service.UserService;
+import love.huhu.platform.service.dto.AnswerRecordDto;
 import love.huhu.platform.service.dto.JudgeMachineDto;
 import love.huhu.platform.service.dto.SolutionDto;
 import love.huhu.platform.service.dto.TestDto;
@@ -107,7 +108,6 @@ public class ManagerClient {
                 .form("userId", studentId)
                 .form("id", answerRecordId)
                 .execute().body();
-
         return JSONUtil.parseArray(response);
     }
     private HttpRequest managerGet(String url) {
@@ -214,11 +214,7 @@ public class ManagerClient {
                 .form("userId",userId)
                 .form("id",testId)
                 .execute().body();
-        JSONArray array = JSONUtil.parseObj(response).getJSONArray("content");
-        if (array.toArray().length != 0) {
-            return JSONUtil.parseObj(response);
-        }
-        return null;
+        return JSONUtil.parseObj(response);
     }
     public JSONObject getTestByIds(List<Long> testIds) {
         String response = managerGet("/api/test")
