@@ -73,6 +73,13 @@ public class TestController {
                 .ge(TestUser::getTestId,testId)
                 .ge(TestUser::getUserId,UserHolder.getUserId()).one(),HttpStatus.OK);
     }
+    @ApiOperation("查询我所有的测验记录")
+    @AuthorizationRequired
+    @GetMapping("records")
+    public ResponseEntity<Object> getTestRecords() {
+        return new ResponseEntity<>(testUserService.lambdaQuery()
+                .ge(TestUser::getUserId,UserHolder.getUserId()).list(),HttpStatus.OK);
+    }
     @ApiOperation("查询我的所有测验记录")
     @AuthorizationRequired
     @GetMapping("record/all")
