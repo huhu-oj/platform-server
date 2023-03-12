@@ -45,15 +45,19 @@ public class RequestInterceptor implements HandlerInterceptor {
             authorizationHandler.handleIdentity(request);
         } catch (RuntimeException e) {
             log.error(e.getMessage());
+
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"请先登录");
             return false;
         }
 
         try {
             if (!authorizationHandler.handleAuth(permission)) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Unauthorized");
                 return false;
             }
         } catch (Exception e) {
             log.error(e.getMessage());
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Unauthorized:"+e.getMessage());
             return false;
         }
         return true;
