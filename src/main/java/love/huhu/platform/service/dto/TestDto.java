@@ -37,11 +37,11 @@ public class TestDto {
     private List<AnswerRecordDto> answerRecords;
     @NotNull
     @ApiModelProperty(value = "开始时间")
-    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-ddTHH:mm:ss")
+//    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-ddTHH:mm:ss")
     private DateTime startTime;
 
     @NotNull
-    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-ddTHH:mm:ss")
+//    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-ddTHH:mm:ss")
     @ApiModelProperty(value = "结束时间")
     private DateTime endTime;
 

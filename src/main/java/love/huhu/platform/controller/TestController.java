@@ -70,22 +70,22 @@ public class TestController {
     @GetMapping("record")
     public ResponseEntity<Object> getTestRecord(Long testId) {
         return new ResponseEntity<>(testUserService.lambdaQuery()
-                .ge(TestUser::getTestId,testId)
-                .ge(TestUser::getUserId,UserHolder.getUserId()).one(),HttpStatus.OK);
+                .eq(TestUser::getTestId,testId)
+                .eq(TestUser::getUserId,UserHolder.getUserId()).one(),HttpStatus.OK);
     }
     @ApiOperation("查询我所有的测验记录")
     @AuthorizationRequired
     @GetMapping("records")
     public ResponseEntity<Object> getTestRecords() {
         return new ResponseEntity<>(testUserService.lambdaQuery()
-                .ge(TestUser::getUserId,UserHolder.getUserId()).list(),HttpStatus.OK);
+                .eq(TestUser::getUserId,UserHolder.getUserId()).list(),HttpStatus.OK);
     }
     @ApiOperation("查询我的所有测验记录")
     @AuthorizationRequired
     @GetMapping("record/all")
     public ResponseEntity<Object> getAllTestRecord() {
         return new ResponseEntity<>(testUserService.lambdaQuery()
-                .ge(TestUser::getUserId,UserHolder.getUserId()).one(),HttpStatus.OK);
+                .eq(TestUser::getUserId,UserHolder.getUserId()).one(),HttpStatus.OK);
     }
     @AuthorizationRequired(PermissionEnum.TEACHER)
     @PostMapping

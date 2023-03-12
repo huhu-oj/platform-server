@@ -50,11 +50,11 @@ public class HintDto implements Serializable {
 
 
     @ApiModelProperty(value = "更新时间")
-    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-ddTHH:mm:ss")
+//    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-ddTHH:mm:ss")
     private DateTime createTime;
 
     @ApiModelProperty(value = "创建时间")
-    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-ddTHH:mm:ss")
+//    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-ddTHH:mm:ss")
     private DateTime updateTime;
 
     @ApiModelProperty(value = "渲染文本")

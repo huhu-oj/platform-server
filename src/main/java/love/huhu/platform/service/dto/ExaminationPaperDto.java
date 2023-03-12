@@ -50,11 +50,11 @@ public class ExaminationPaperDto implements Serializable {
     @ApiModelProperty(value = "描述渲染文本")
     private String descriptionHtml;
     @ApiModelProperty(value = "更新时间")
-    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-ddTHH:mm:ss")
+//    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-ddTHH:mm:ss")
     private DateTime createTime;
 
     @ApiModelProperty(value = "创建时间")
-    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-ddTHH:mm:ss")
+//    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-ddTHH:mm:ss")
     private DateTime updateTime;
     private List<TestDto> tests;
 
