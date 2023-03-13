@@ -158,10 +158,11 @@ public class ManagerClient {
                 .execute().body();
         return JSONUtil.parseObj(response);
     }
-    public JSONObject getSolution(Long problemId,Long solutionId) {
+    public JSONObject getSolution(Long problemId,Long solutionId,Long userId) {
         String response = managerGet("/api/solution")
                 .form("problemId",problemId)
                 .form("id",solutionId)
+                .form("userId",userId)
                 .execute().body();
         return JSONUtil.parseObj(response);
     }
@@ -171,11 +172,17 @@ public class ManagerClient {
                 .execute().body();
         return JSONUtil.parseObj(response);
     }
+    public JSONObject updateSolution(SolutionDto solution) {
+        String response = managerPut("/api/solution")
+                .body(JSONUtil.toJsonStr(solution))
+                .execute().body();
+        return null;
+    }
     public JSONObject deleteSolutions(Long[] solutionIds) {
         String response = managerDel("/api/solution")
                 .body(Arrays.toString(solutionIds))
                 .execute().body();
-        return JSONUtil.parseObj(response);
+        return null;
     }
     public JSONObject getTest(Long testId) {
         String response = managerGet("/api/test")

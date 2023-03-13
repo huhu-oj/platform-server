@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+
 /**
  * @Description
  * @Author nwl
@@ -23,9 +25,13 @@ public class SolutionController {
     @AuthorizationRequired
     @GetMapping
     public ResponseEntity<Object> getSolutions(Long problemId, Long solutionId) {
-        return new ResponseEntity<>(managerClient.getSolution(problemId,solutionId),HttpStatus.OK);
+        return new ResponseEntity<>(managerClient.getSolution(problemId,solutionId,null),HttpStatus.OK);
     }
-
+    @AuthorizationRequired
+    @GetMapping("my")
+    public ResponseEntity<Object> getMySolutions(Long problemId, Long solutionId) {
+        return new ResponseEntity<>(managerClient.getSolution(problemId,solutionId,UserHolder.getUserId()),HttpStatus.OK);
+    }
     @AuthorizationRequired
     @PostMapping
     public ResponseEntity<Object> saveSolution(@RequestBody SolutionDto solution) {
@@ -34,12 +40,12 @@ public class SolutionController {
     }
     @AuthorizationRequired
     @PutMapping
-    public ResponseEntity<Object> updateSolution(@RequestBody Solution solution) {
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Object> updateSolution(@RequestBody SolutionDto solution) {
+        return new ResponseEntity<>(managerClient.updateSolution(solution),HttpStatus.OK);
     }
     @AuthorizationRequired
     @DeleteMapping
     public ResponseEntity<Object> deleteSolution(Long solutionId) {
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(managerClient.deleteSolutions(new Long[]{solutionId}),HttpStatus.OK);
     }
 }
