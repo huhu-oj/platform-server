@@ -1,6 +1,7 @@
 package love.huhu.platform.client;
 
 import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
@@ -12,10 +13,13 @@ import love.huhu.platform.service.dto.JudgeMachineDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.json.Json;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static org.springframework.data.redis.connection.ReactiveStreamCommands.AddStreamRecord.body;
 
 /**
  * @Description
@@ -60,6 +64,9 @@ public class JudgeClient {
                 .filter(judgeMachine -> judgeMachine.getLanguages().stream().anyMatch(languageDto -> Objects.equals(languageDto.getId(), languageId)))
                 .collect(Collectors.toList());
 
+        if (supportedJudgeMachines.isEmpty()) {
+            throw new RuntimeException("暂无判题资源");
+        }
         return supportedJudgeMachines.get(new Double(Math.floor(Math.random() * judgeMachines.size())).intValue());
 
     }
@@ -68,9 +75,13 @@ public class JudgeClient {
         //获取判题机
         JudgeMachineDto judgeMachine = getRandomHost(record.getLanguageId());
         //发送判题请求
-        String result = HttpRequest.post(judgeMachine.getUrl() + "/api/v1/test")
+        HttpResponse response = HttpRequest.post(judgeMachine.getUrl() + "/api/v1/test")
                 .body(JSONUtil.toJsonStr(record))
-                .execute().body();
+                .execute();
+        if (response.getStatus() == 500) {
+            throw new RuntimeException((String) JSONUtil.parseObj(response.body()).getStr("message"));
+        }
+        String result = response.body();
         AnswerRecord answerRecord = dealResult(result);
         return answerRecord;
     }
