@@ -6,6 +6,7 @@ import love.huhu.platform.authorization.UserHolder;
 import love.huhu.platform.client.ManagerClient;
 import love.huhu.platform.domain.User;
 import love.huhu.platform.dto.UserLoginDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 public class AuthController {
 
+    @Value("${api.manager-server}")
+    private String serverAddr;
     private final ManagerClient managerClient;
     @PostMapping("login")
     public ResponseEntity<Object> login(@RequestBody @Validated UserLoginDto dto, HttpServletResponse response) {
@@ -41,5 +44,9 @@ public class AuthController {
     @AuthorizationRequired
     public ResponseEntity<Object> logout() {
         return new ResponseEntity<>(managerClient.userLogout(UserHolder.getToken()),HttpStatus.OK);
+    }
+    @GetMapping("addr")
+    public ResponseEntity<Object> getManagerAddr() {
+        return new ResponseEntity<>(serverAddr,HttpStatus.OK);
     }
 }
