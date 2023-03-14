@@ -13,6 +13,7 @@ import love.huhu.platform.domain.TestUser;
 import love.huhu.platform.service.TestService;
 import love.huhu.platform.service.TestUserService;
 import love.huhu.platform.service.dto.TestDto;
+import love.huhu.platform.websocket.TestServer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,7 @@ public class TestController {
     private final ManagerClient managerClient;
     private final TestService testService;
     private final TestUserService testUserService;
+    private final TestServer testServer;
     @AuthorizationRequired(PermissionEnum.STUDENT)
     @GetMapping
     public ResponseEntity<Object> getMyTest(Long testId) {
@@ -64,7 +66,13 @@ public class TestController {
     @AuthorizationRequired
     @PostMapping("record")
     public ResponseEntity<Object> saveTestRecord(@RequestBody TestUser test) {
-        return new ResponseEntity<>(testUserService.save(test),HttpStatus.OK);
+        boolean save = testUserService.save(test);
+        if(save) {
+            testServer.getTestSession(test.getTestId()).forEach(session->{
+                session.sendMessage("update");
+            });
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
     @ApiOperation("查询我的测验记录")
     @AuthorizationRequired

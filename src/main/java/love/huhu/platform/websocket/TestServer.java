@@ -17,42 +17,55 @@ package love.huhu.platform.websocket;
 
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
+import love.huhu.platform.authorization.AuthorizationRequired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.stream.Collectors;
+
 /**
  * @author ZhangHouYing
  * @date 2019-08-10 15:46
  */
-@ServerEndpoint("/webSocket")
+@ServerEndpoint("/test/{id}")
 @Slf4j
 @Component
-public class WebSocketServer {
+public class TestServer {
 
 	/**
 	 * concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。
 	 */
-	private static CopyOnWriteArraySet<WebSocketServer> webSocketSet = new CopyOnWriteArraySet<WebSocketServer>();
+	private static CopyOnWriteArraySet<TestServer> webSocketSet = new CopyOnWriteArraySet<TestServer>();
 
 	/**
 	 * 与某个客户端的连接会话，需要通过它来给客户端发送数据
 	 */
 	private Session session;
 
+	private Long id;
+
+	public List<TestServer> getTestSession(Long testId) {
+		return webSocketSet.stream().filter(ws-> Objects.equals(ws.id, testId)).collect(Collectors.toList());
+	}
+
 	/**
 	 * 连接建立成功调用的方法
 	 * */
 	@OnOpen
-	public void onOpen(Session session) {
+	@AuthorizationRequired
+	public void onOpen(Session session, @PathParam("id") Long id) {
 		this.session = session;
+		this.id = id;
 		//如果存在就先删除一个，防止重复推送消息
-//		for (WebSocketServer webSocket:webSocketSet) {
-//			if (webSocket.sid.equals(sid)) {
+//		for (TestServer webSocket:webSocketSet) {
+//			if (webSocket.id.equals(id)) {
 //				webSocketSet.remove(webSocket);
 //			}
 //		}
@@ -74,12 +87,8 @@ public class WebSocketServer {
 	public void onMessage(String message, Session session) {
 		log.info("收到的信息:"+message);
 		//群发消息
-		for (WebSocketServer item : webSocketSet) {
-			try {
-				item.sendMessage(message);
-			} catch (IOException e) {
-				log.error(e.getMessage(),e);
-			}
+		for (TestServer item : webSocketSet) {
+			item.sendMessage(message);
 		}
 	}
 
@@ -91,8 +100,12 @@ public class WebSocketServer {
 	/**
 	 * 实现服务器主动推送
 	 */
-	private void sendMessage(String message) throws IOException {
-		this.session.getBasicRemote().sendText(message);
+	public void sendMessage(String message) {
+		try {
+			this.session.getBasicRemote().sendText(message);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 
@@ -102,7 +115,7 @@ public class WebSocketServer {
 	public static void sendInfo(SocketMsg socketMsg) throws IOException {
 		String message = JSONUtil.toJsonStr(socketMsg);
 		log.info("推送消息到，推送内容:"+message);
-		for (WebSocketServer item : webSocketSet) {
+		for (TestServer item : webSocketSet) {
 			item.sendMessage(message);
 		}
 	}
