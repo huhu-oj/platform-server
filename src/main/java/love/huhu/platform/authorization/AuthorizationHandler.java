@@ -51,12 +51,17 @@ public class AuthorizationHandler {
         log.debug("切割token：{}",token);
         //校验token
         if (!redisUtils.hasKey(properties.getOnlineKey()+token)) {
-            managerClient.systemLogin();
             throw new RuntimeException("token过期");
         }
         //解析token
         String username = JWTUtil.parseToken(token).getPayload("user").toString();
-        User user = getUserByName(username);
+        User user = null;
+        while(user == null || user.getId() == null) {
+            user = getUserByName(username);
+            if (user == null || user.getId() == null) {
+                managerClient.systemLogin();
+            }
+        }
 
         //放入threadlocal
         UserHolder.setUser(user,tokenToSave);

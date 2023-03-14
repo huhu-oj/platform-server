@@ -15,6 +15,7 @@ import love.huhu.platform.service.TestUserService;
 import love.huhu.platform.service.dto.TestDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -76,6 +77,7 @@ public class TestController {
     @ApiOperation("查询我所有的测验记录")
     @AuthorizationRequired
     @GetMapping("records")
+    @Transactional
     public ResponseEntity<Object> getTestRecords() {
         return new ResponseEntity<>(testUserService.lambdaQuery()
                 .eq(TestUser::getUserId,UserHolder.getUserId()).list(),HttpStatus.OK);

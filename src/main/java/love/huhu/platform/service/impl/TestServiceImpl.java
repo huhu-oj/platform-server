@@ -11,6 +11,7 @@ import love.huhu.platform.service.dto.TestDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import love.huhu.platform.domain.Test;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,6 +30,7 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
 
     private final DeptService deptService;
     @Override
+    @Transactional
     public int saveTest(TestDto test) {
         test.setUserId(UserHolder.getUserId());
         Test toInsert = new Test();
@@ -40,6 +42,7 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
     }
 
     @Override
+    @Transactional
     public List<Long> getMyTestIds(Long selfDeptId) {
         Set<Long> superiorDeptIds = getSuperiorDept(selfDeptId);
         //查询匹配的id
