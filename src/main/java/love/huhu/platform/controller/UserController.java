@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,6 +37,12 @@ public class UserController {
     @AuthorizationRequired
     public ResponseEntity<Object> getUserByUsername(String username) {
         List<User> users = userService.lambdaQuery().like(User::getNickName, username).list();
+        return new ResponseEntity<>(users,HttpStatus.OK);
+    }
+    @GetMapping("ids")
+    @AuthorizationRequired
+    public ResponseEntity<Object> getUserByIds(Long [] userIds) {
+        List<User> users = userService.lambdaQuery().in(User::getId, Arrays.asList(userIds)).list();
         return new ResponseEntity<>(users,HttpStatus.OK);
     }
 }
