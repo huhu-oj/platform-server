@@ -10,6 +10,7 @@ import love.huhu.platform.domain.AnswerRecord;
 import love.huhu.platform.domain.JudgeMachine;
 import love.huhu.platform.service.AnswerRecordService;
 import love.huhu.platform.service.dto.JudgeMachineDto;
+import love.huhu.platform.websocket.TestServer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +35,7 @@ public class JudgeClient {
     String managerServerApi;
     private final ManagerClient managerClient;
     private final AnswerRecordService answerRecordService;
+    private final TestServer testServer;
     public void judge(AnswerRecord record) {
         JudgeMachineDto judgeMachine = getRandomHost(record.getLanguageId());
         //发送判题请求
@@ -49,8 +51,13 @@ public class JudgeClient {
         if (record.getExecuteResultId() <= 0) {
             throw new RuntimeException("判题失败");
         }
-        answerRecordService.save(record);
+        boolean save = answerRecordService.save(record);
 
+        if(save) {
+            testServer.getTestSession(record.getTestId()).forEach(session->{
+                session.sendMessage("update");
+            });
+        }
     }
 
     private JudgeMachineDto getRandomHost(Long languageId) {
