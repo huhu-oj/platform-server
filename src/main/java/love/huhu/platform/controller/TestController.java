@@ -82,6 +82,14 @@ public class TestController {
                 .eq(TestUser::getTestId,testId)
                 .eq(TestUser::getUserId,UserHolder.getUserId()).one(),HttpStatus.OK);
     }
+    @ApiOperation("查询学生的测验记录")
+    @AuthorizationRequired(PermissionEnum.TEACHER)
+    @GetMapping("record/student")
+    @Transactional
+    public ResponseEntity<Object> getStudentTestRecord(Long studentId) {
+        return new ResponseEntity<>(testUserService.lambdaQuery()
+                .eq(TestUser::getUserId,studentId).list(),HttpStatus.OK);
+    }
     @ApiOperation("查询我所有的测验记录")
     @AuthorizationRequired
     @GetMapping("records")
