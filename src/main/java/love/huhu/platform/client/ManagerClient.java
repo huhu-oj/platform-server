@@ -61,13 +61,21 @@ public class ManagerClient {
         UserLoginDto userLoginDto = new UserLoginDto();
         userLoginDto.setUsername(username);
         userLoginDto.setPassword(password);
+        JSONObject json = getGraphicCode();
+        String uuid = json.getStr("uuid");
+        //查询redis
+        String code = (String) redisUtils.get(uuid);
+        userLoginDto.setUuid(uuid);
+        userLoginDto.setCode(code);
+
+        //RSA加密
+        RSA rsa = new RSA(null, publicKey);
+        userLoginDto.setPassword(rsa.encryptBase64(userLoginDto.getPassword(), KeyType.PublicKey));
+
         JSONObject response = login(userLoginDto);
         token = response.getStr("token");
     }
     private JSONObject login(UserLoginDto userLoginDto) {
-        //RSA加密
-        RSA rsa = new RSA(null, publicKey);
-        userLoginDto.setPassword(rsa.encryptBase64(userLoginDto.getPassword(), KeyType.PublicKey));
         //userLoginDto->json
         String request = JSONUtil.toJsonStr(userLoginDto);
         //发送请求
@@ -111,30 +119,30 @@ public class ManagerClient {
         return JSONUtil.parseArray(response);
     }
     private HttpRequest managerGet(String url) {
-        if (StrUtil.isBlank(token)) {
-            systemLogin();
-        }
+//        if (StrUtil.isBlank(token)) {
+//            systemLogin();
+//        }
         return HttpRequest.get(managerServerApi+url)
                 .header(properties.getHeader(),token);
     }
     private HttpRequest managerPost(String url) {
-        if (StrUtil.isBlank(token)) {
-            systemLogin();
-        }
+//        if (StrUtil.isBlank(token)) {
+//            systemLogin();
+//        }
         return HttpRequest.post(managerServerApi+url)
                 .header(properties.getHeader(),token);
     }
     private HttpRequest managerPut(String url) {
-        if (StrUtil.isBlank(token)) {
-            systemLogin();
-        }
+//        if (StrUtil.isBlank(token)) {
+//            systemLogin();
+//        }
         return HttpRequest.put(managerServerApi+url)
                 .header(properties.getHeader(),token);
     }
     private HttpRequest managerDel(String url) {
-        if (StrUtil.isBlank(token)) {
-            systemLogin();
-        }
+//        if (StrUtil.isBlank(token)) {
+//            systemLogin();
+//        }
         return HttpRequest.delete(managerServerApi+url)
                 .header(properties.getHeader(),token);
     }

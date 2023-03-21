@@ -1,5 +1,6 @@
 package love.huhu.platform.controller;
 
+import cn.hutool.json.JSONObject;
 import lombok.RequiredArgsConstructor;
 import love.huhu.platform.authorization.AuthorizationRequired;
 import love.huhu.platform.authorization.UserHolder;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Objects;
 
 
 /**
@@ -29,8 +31,12 @@ public class AuthController {
     private String serverAddr;
     private final ManagerClient managerClient;
     @PostMapping("login")
-    public ResponseEntity<Object> login(@RequestBody @Validated UserLoginDto dto, HttpServletResponse response) {
-        return new ResponseEntity<>(managerClient.userLogin(dto),HttpStatus.OK);
+    public ResponseEntity<Object> login(@RequestBody @Validated UserLoginDto dto) {
+        JSONObject response = managerClient.userLogin(dto);
+        if (response.get("status") != null && !Objects.equals(response.getInt("status"), 200)) {
+            return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @PostMapping("register")
     public ResponseEntity<User> register(@RequestBody @Validated UserLoginDto dtoForRegister) {
