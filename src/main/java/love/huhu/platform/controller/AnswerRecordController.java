@@ -8,13 +8,11 @@ import love.huhu.platform.authorization.PermissionEnum;
 import love.huhu.platform.authorization.UserHolder;
 import love.huhu.platform.client.ManagerClient;
 import love.huhu.platform.domain.AnswerRecord;
+import love.huhu.platform.service.AnswerRecordService;
 import love.huhu.platform.service.dto.AnswerRecordDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,6 +29,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class AnswerRecordController {
     private final ManagerClient managerClient;
+    private final AnswerRecordService answerRecordService;
     @GetMapping
     @AuthorizationRequired(PermissionEnum.STUDENT)
     public ResponseEntity<Object> getAnswerRecords(Long testId, Long problemId,Long answerRecordId) {
@@ -58,4 +57,9 @@ public class AnswerRecordController {
         return new ResponseEntity<>(managerClient.getAnswerRecords(null, problemId, studentId, null),HttpStatus.OK);
     }
 
+    @AuthorizationRequired
+    @PutMapping
+    public ResponseEntity<Object> updateAnswerRecord(@RequestBody AnswerRecord answerRecord) {
+        return new ResponseEntity<>(answerRecordService.updateById(answerRecord),HttpStatus.OK);
+    }
 }
