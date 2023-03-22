@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface AnswerRecordMapper extends BaseMapper<AnswerRecord> {
 
+    Integer getUserOfferUseLanguage(Long userId);
 }
 
 

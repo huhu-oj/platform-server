@@ -10,4 +10,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface AnswerRecordService extends IService<AnswerRecord> {
 
+    Integer getUserOfferUseLanguage(Long userId);
 }

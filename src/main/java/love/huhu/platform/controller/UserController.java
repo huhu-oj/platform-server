@@ -5,6 +5,7 @@ import love.huhu.platform.authorization.AuthorizationRequired;
 import love.huhu.platform.authorization.UserHolder;
 import love.huhu.platform.client.ManagerClient;
 import love.huhu.platform.domain.User;
+import love.huhu.platform.service.AnswerRecordService;
 import love.huhu.platform.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ public class UserController {
 
     private final ManagerClient managerClient;
     private final UserService userService;
+    private final AnswerRecordService answerRecordService;
     @GetMapping
     @AuthorizationRequired
     public ResponseEntity<Object> getUserSelfInfo() {
@@ -44,5 +46,10 @@ public class UserController {
     public ResponseEntity<Object> getUserByIds(Long [] userIds) {
         List<User> users = userService.lambdaQuery().in(User::getId, Arrays.asList(userIds)).list();
         return new ResponseEntity<>(users,HttpStatus.OK);
+    }
+    @GetMapping("language")
+    @AuthorizationRequired
+    public ResponseEntity<Object> getUserOfferUseLanguage() {
+       return new ResponseEntity<>( answerRecordService.getUserOfferUseLanguage(UserHolder.getUserId()),HttpStatus.OK);
     }
 }

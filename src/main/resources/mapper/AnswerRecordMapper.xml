@@ -29,4 +29,17 @@
         pass_num,not_pass_num,execute_result_id,
         note,create_time,update_time
     </sql>
+    <select id="getUserOfferUseLanguage" resultType="java.lang.Integer">
+
+        select t.lang from (
+            select count(language_id) as '数量',language_id as 'lang'
+            from oj_answer_record
+            where user_id = #{userId}
+            group by language_id
+            ORDER BY '数量' DESC
+            LIMIT 1
+        ) t
+
+
+    </select>
 </mapper>

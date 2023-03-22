@@ -15,6 +15,10 @@ import org.springframework.stereotype.Service;
 public class AnswerRecordServiceImpl extends ServiceImpl<AnswerRecordMapper, AnswerRecord>
     implements AnswerRecordService{
 
+    @Override
+    public Integer getUserOfferUseLanguage(Long userId) {
+        return baseMapper.getUserOfferUseLanguage(userId);
+    }
 }
 
 
