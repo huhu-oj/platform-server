@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 import java.net.URI;
 
-@Component
-@RequiredArgsConstructor
+//@Component
+//@RequiredArgsConstructor
 public class WebsocketClient {
 
     @Value("${api.manager-server}")
