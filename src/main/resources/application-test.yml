@@ -60,8 +60,8 @@ system:
   password: system
 #yml变量
 #数据库
-DB_HOST: mysql
+DB_HOST: localhost
 #DB_PORT: 3306
 #DB_USER: root
-#DB_PWD: birthdayis1123
-REDIS_HOST: redis
+#DB_PWD: root
+REDIS_HOST: localhost
